@@ -36,6 +36,7 @@ function createSidebar() {
 
   //add class name for home tabs
   allTab.classList.add("sidebar-tab");
+  allTab.setAttribute("id", "all-tab");
   todayTab.classList.add("sidebar-tab");
   weekTab.classList.add("sidebar-tab");
   importantTab.classList.add("sidebar-tab");
@@ -69,7 +70,7 @@ function createSidebar() {
   const newProj = document.createElement("button");
   newProj.classList.add("new-proj");
   newProj.classList.add("sidebar-tab");
-  newProj.textContent = "New Project";
+  newProj.textContent = "+ New Project";
   sidebar.appendChild(newProj);
 
   //6.
@@ -103,6 +104,14 @@ function createSidebar() {
   importantTab.addEventListener("click", () => {
     clearContent();
     importantPage();
+  });
+
+  unassigned.addEventListener("click", () => {
+    clearContent();
+  });
+
+  newProj.addEventListener("click", () => {
+    clearContent();
   });
 }
 

@@ -19,5 +19,13 @@
   "devDependencies": {
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "util": "^0.12.5"
+  },
+  "browser": {
+    "path": false,
+    "stream": false
   }
 }
