@@ -19,7 +19,7 @@ body {
   align-items: center;
   height: clamp(100px, 20%, 175px);
   background-color: var(--darkblue);
-  font-size: clamp(60px, 10vh, 10vh);
+  font-size: clamp(70px, 10vh, 10vh);
   color: white;
   padding-left: 25px;
 }
@@ -43,10 +43,13 @@ body {
 .main-content-container {
   width: 100%;
   padding-left: 25px;
+  padding-right: 25px;
 }
 
 .page-header {
-  font-size: clamp(28px, 7vh, 70px);
+  font-size: clamp(52px, 7vh, 70px);
+  border-bottom: 1px solid var(--darkblue);
+  color: var(--darkblue);
 }
 
 .sidebar-header {
@@ -68,4 +71,5 @@ button {
 
 button:hover {
   filter: brightness(85%);
+  cursor: pointer;
 }
