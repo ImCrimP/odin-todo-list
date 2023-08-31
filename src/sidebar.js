@@ -6,6 +6,18 @@ import unassignedPage from "./unassigned";
 import completedPage from "./completed";
 import createNewProj from "./newProj";
 //import { ContextExclusionPlugin } from "webpack";
+let projArr = [];
+
+console.log(projArr);
+
+class Project {
+  constructor(name) {
+    this.name = name;
+  }
+  printName() {
+    console.log(this.name, "is my name");
+  }
+}
 
 function createSidebar() {
   const bodyContainer = document.querySelector("#body-container");
@@ -130,6 +142,17 @@ function createSidebar() {
     clearContent();
     completedPage();
   });
+
+  function newProjPage() {
+    const pageHeader = document.createElement("h1");
+    pageHeader.classList.add("page-header");
+    pageHeader.textContent = "Important Tasks";
+    mainContentContainer.appendChild(pageHeader);
+
+    const importantTask = document.querySelector("#important-tab");
+    importantTask.style.backgroundColor = "rgb(65, 72, 120)";
+    importantTask.style.color = "white";
+  }
 }
 
 function clearContent() {
@@ -138,9 +161,9 @@ function clearContent() {
   const mainContentContainer = document.querySelector(
     ".main-content-container"
   );
-  if (sidebar) {
-    bodyContainer.removeChild(sidebar);
-  }
+  //if (sidebar) {
+  //  bodyContainer.removeChild(sidebar);
+  //}
 
   if (mainContentContainer) {
     bodyContainer.removeChild(mainContentContainer);
@@ -148,3 +171,4 @@ function clearContent() {
 }
 
 export default createSidebar;
+clearContent;

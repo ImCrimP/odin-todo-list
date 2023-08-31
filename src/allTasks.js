@@ -3,7 +3,7 @@ import createSidebar from "./sidebar";
 
 function AllTasksPage() {
   //append sidebar for flex so that on left side
-  createSidebar();
+  //createSidebar();
 
   //add main content container so that is is to the right of sidebar
   const bodyContainer = document.querySelector("#body-container");

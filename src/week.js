@@ -2,7 +2,7 @@ import createSidebar from "./sidebar";
 
 function weekPage() {
   //create sidebar
-  createSidebar();
+  //createSidebar();
 
   //add main content container so that is is to the right of sidebar
   const bodyContainer = document.querySelector("#body-container");
