@@ -12,15 +12,15 @@ function createNewProj() {
 
   //create add and delete buttons
   const addBtn = document.createElement("button");
-  const deleteBtn = document.createElement("button");
+  const cancelBtn = document.createElement("button");
   addBtn.textContent = "Add";
-  deleteBtn.textContent = "Delete";
+  cancelBtn.textContent = "Cancel";
   addBtn.classList.add("proj-btn");
-  deleteBtn.classList.add("proj-btn");
+  cancelBtn.classList.add("proj-btn");
 
   projContainer.appendChild(projName);
   projContainer.appendChild(addBtn);
-  projContainer.appendChild(deleteBtn);
+  projContainer.appendChild(cancelBtn);
 
   newProj.parentNode.insertBefore(projContainer, newProj);
 }

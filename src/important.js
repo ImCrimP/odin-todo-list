@@ -15,6 +15,10 @@ function importantPage() {
   pageHeader.classList.add("page-header");
   pageHeader.textContent = "Important Tasks";
   mainContentContainer.appendChild(pageHeader);
+
+  const importantTask = document.querySelector("#important-tab");
+  importantTask.style.backgroundColor = "rgb(65, 72, 120)";
+  importantTask.style.color = "white";
 }
 
 export default importantPage;

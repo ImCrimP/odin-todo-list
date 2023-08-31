@@ -41,8 +41,11 @@ function createSidebar() {
   allTab.classList.add("sidebar-tab");
   allTab.setAttribute("id", "all-tab");
   todayTab.classList.add("sidebar-tab");
+  todayTab.setAttribute("id", "today-tab");
   weekTab.classList.add("sidebar-tab");
+  weekTab.setAttribute("id", "week-tab");
   importantTab.classList.add("sidebar-tab");
+  importantTab.setAttribute("id", "important-tab");
 
   //add textContent for home tabs
   allTab.textContent = "All Tasks";
@@ -66,6 +69,7 @@ function createSidebar() {
   //4.
   const unassigned = document.createElement("button");
   unassigned.classList.add("sidebar-tab");
+  unassigned.setAttribute("id", "unassigned-tab");
   unassigned.textContent = "Unassigned";
   sidebar.appendChild(unassigned);
 
@@ -85,6 +89,7 @@ function createSidebar() {
   //7.
   const allCompleted = document.createElement("button");
   allCompleted.classList.add("sidebar-tab");
+  allCompleted.setAttribute("id", "all-completed-tab");
   allCompleted.textContent = "All";
   sidebar.appendChild(allCompleted);
 

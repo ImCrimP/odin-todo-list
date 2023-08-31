@@ -15,6 +15,10 @@ function weekPage() {
   pageHeader.classList.add("page-header");
   pageHeader.textContent = "Week's Tasks";
   mainContentContainer.appendChild(pageHeader);
+
+  const weekTask = document.querySelector("#week-tab");
+  weekTask.style.backgroundColor = "rgb(65, 72, 120)";
+  weekTask.style.color = "white";
 }
 
 export default weekPage;
