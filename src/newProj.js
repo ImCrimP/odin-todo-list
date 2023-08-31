@@ -1,4 +1,4 @@
-import clearContent from "./sidebar";
+import createSidebar from "./sidebar";
 function createNewProj() {
   let projArr = [];
   /*
@@ -75,11 +75,9 @@ function createNewProj() {
     const tabName = projInput.value;
 
     const newTab = document.createElement("button");
-    console.log(tabName);
-    newTab.classList.add("sidebar-tab");
-    newTab.setAttribute("id", "uniqueIdentifier");
+    newTab.classList.add("sidebar-tab", "new-tab");
+    newTab.setAttribute("id", tabName);
     newTab.textContent = tabName;
-    console.log(newTab.id);
 
     newTab.addEventListener("click", () => {
       clearContent();
@@ -94,19 +92,59 @@ function createNewProj() {
       pageHeader.textContent = `${tabName}`;
       mainContentContainer.appendChild(pageHeader);
 
+      /*
       const weekTask = document.querySelector("#week-tab");
       weekTask.style.backgroundColor = "rgb(65, 72, 120)";
       weekTask.style.color = "white";
+      */
     });
 
     sidebar.removeChild(projContainer);
 
     newProj.parentNode.insertBefore(newTab, newProj);
+    highlightTab();
+    addToArray();
+    console.log(projArr);
   });
 
   cancelBtn.addEventListener("click", () => {
     sidebar.removeChild(projContainer);
   });
+
+  function clearContent() {
+    const bodyContainer = document.querySelector("#body-container");
+    //const sidebar = document.querySelector(".sidebar");
+    const mainContentContainer = document.querySelector(
+      ".main-content-container"
+    );
+    //if (sidebar) {
+    //  bodyContainer.removeChild(sidebar);
+    //}
+
+    if (mainContentContainer) {
+      bodyContainer.removeChild(mainContentContainer);
+    }
+  }
+
+  function addToArray() {
+    const tabs = document.querySelectorAll(".new-tab");
+
+    tabs.forEach((tab) => {
+      projArr.push(tab);
+    });
+  }
+
+  function highlightTab() {
+    const btns = document.querySelectorAll(".sidebar-tab");
+
+    btns.forEach((button) => {
+      button.addEventListener("click", () => {
+        btns.forEach((btn) => btn.classList.remove("active"));
+
+        button.classList.add("active");
+      });
+    });
+  }
 }
 
 export default createNewProj;

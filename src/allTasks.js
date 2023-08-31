@@ -22,9 +22,11 @@ function AllTasksPage() {
   addTask.textContent = "+ Add Task";
   mainContentContainer.appendChild(addTask);
 
+  /*
   const allTasks = document.querySelector("#all-tab");
   allTasks.style.backgroundColor = "rgb(65, 72, 120)";
   allTasks.style.color = "white";
+  */
 
   //add task event listener
   addTask.addEventListener("click", () => {});

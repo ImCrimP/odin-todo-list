@@ -16,9 +16,11 @@ function unassignedPage() {
   pageHeader.textContent = "Unassigned Tasks";
   mainContentContainer.appendChild(pageHeader);
 
+  /*
   const unassignedProj = document.querySelector("#unassigned-tab");
   unassignedProj.style.backgroundColor = "rgb(65, 72, 120)";
   unassignedProj.style.color = "white";
+  */
 }
 
 export default unassignedPage;

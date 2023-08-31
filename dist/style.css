@@ -87,3 +87,8 @@ button:hover {
 .proj-btn {
   border: 1px solid;
 }
+
+.active {
+  background-color: var(--darkblue);
+  color: white;
+}

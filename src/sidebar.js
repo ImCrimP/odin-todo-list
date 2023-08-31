@@ -50,7 +50,7 @@ function createSidebar() {
   const importantTab = document.createElement("button");
 
   //add class name for home tabs
-  allTab.classList.add("sidebar-tab");
+  allTab.classList.add("sidebar-tab", "active");
   allTab.setAttribute("id", "all-tab");
   todayTab.classList.add("sidebar-tab");
   todayTab.setAttribute("id", "today-tab");
@@ -153,22 +153,32 @@ function createSidebar() {
     importantTask.style.backgroundColor = "rgb(65, 72, 120)";
     importantTask.style.color = "white";
   }
-}
 
-function clearContent() {
-  const bodyContainer = document.querySelector("#body-container");
-  const sidebar = document.querySelector(".sidebar");
-  const mainContentContainer = document.querySelector(
-    ".main-content-container"
-  );
-  //if (sidebar) {
-  //  bodyContainer.removeChild(sidebar);
-  //}
+  const btns = document.querySelectorAll(".sidebar-tab");
 
-  if (mainContentContainer) {
-    bodyContainer.removeChild(mainContentContainer);
+  btns.forEach((button) => {
+    console.log(button.classList);
+    button.addEventListener("click", () => {
+      btns.forEach((btn) => btn.classList.remove("active"));
+
+      button.classList.add("active");
+    });
+  });
+
+  function clearContent() {
+    const bodyContainer = document.querySelector("#body-container");
+    //const sidebar = document.querySelector(".sidebar");
+    const mainContentContainer = document.querySelector(
+      ".main-content-container"
+    );
+    //if (sidebar) {
+    //  bodyContainer.removeChild(sidebar);
+    //}
+
+    if (mainContentContainer) {
+      bodyContainer.removeChild(mainContentContainer);
+    }
   }
 }
 
 export default createSidebar;
-clearContent;

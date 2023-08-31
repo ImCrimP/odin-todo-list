@@ -16,9 +16,11 @@ function todayPage() {
   pageHeader.textContent = "Today's Tasks";
   mainContentContainer.appendChild(pageHeader);
 
+  /*
   const todayTask = document.querySelector("#today-tab");
   todayTask.style.backgroundColor = "rgb(65, 72, 120)";
   todayTask.style.color = "white";
+  */
 }
 
 export default todayPage;

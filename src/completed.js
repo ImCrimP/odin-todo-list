@@ -16,8 +16,10 @@ function completedPage() {
   pageHeader.textContent = "Completed Tasks";
   mainContentContainer.appendChild(pageHeader);
 
+  /*
   const completedTask = document.querySelector("#all-completed-tab");
   completedTask.style.backgroundColor = "rgb(65, 72, 120)";
   completedTask.style.color = "white";
+  */
 }
 export default completedPage;
