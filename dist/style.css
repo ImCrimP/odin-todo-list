@@ -73,3 +73,17 @@ button:hover {
   filter: brightness(85%);
   cursor: pointer;
 }
+
+.proj-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.proj-name {
+  font-size: 28px;
+  padding: 5px;
+}
+
+.proj-btn {
+  border: 1px solid;
+}

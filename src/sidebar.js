@@ -2,6 +2,9 @@ import AllTasksPage from "./allTasks";
 import todayPage from "./today";
 import weekPage from "./week";
 import importantPage from "./important";
+import unassignedPage from "./unassigned";
+import completedPage from "./completed";
+import createNewProj from "./newProj";
 //import { ContextExclusionPlugin } from "webpack";
 
 function createSidebar() {
@@ -108,10 +111,19 @@ function createSidebar() {
 
   unassigned.addEventListener("click", () => {
     clearContent();
+    unassignedPage();
   });
 
   newProj.addEventListener("click", () => {
+    const projContainer = document.querySelector(".proj-container");
+    if (!projContainer) {
+      createNewProj();
+    }
+  });
+
+  allCompleted.addEventListener("click", () => {
     clearContent();
+    completedPage();
   });
 }
 
