@@ -5,6 +5,7 @@ import importantPage from "./important";
 import unassignedPage from "./unassigned";
 import completedPage from "./completed";
 import createNewProj from "./newProj";
+import forEachBtn from "./forEach";
 //import { ContextExclusionPlugin } from "webpack";
 let projArr = [];
 
@@ -50,13 +51,13 @@ function createSidebar() {
   const importantTab = document.createElement("button");
 
   //add class name for home tabs
-  allTab.classList.add("sidebar-tab", "active");
+  allTab.classList.add("sidebar-tab", "active", "page-tab");
   allTab.setAttribute("id", "all-tab");
-  todayTab.classList.add("sidebar-tab");
+  todayTab.classList.add("sidebar-tab", "page-tab");
   todayTab.setAttribute("id", "today-tab");
-  weekTab.classList.add("sidebar-tab");
+  weekTab.classList.add("sidebar-tab", "page-tab");
   weekTab.setAttribute("id", "week-tab");
-  importantTab.classList.add("sidebar-tab");
+  importantTab.classList.add("sidebar-tab", "page-tab");
   importantTab.setAttribute("id", "important-tab");
 
   //add textContent for home tabs
@@ -80,7 +81,7 @@ function createSidebar() {
 
   //4.
   const unassigned = document.createElement("button");
-  unassigned.classList.add("sidebar-tab");
+  unassigned.classList.add("sidebar-tab", "page-tab");
   unassigned.setAttribute("id", "unassigned-tab");
   unassigned.textContent = "Unassigned";
   sidebar.appendChild(unassigned);
@@ -89,6 +90,7 @@ function createSidebar() {
   const newProj = document.createElement("button");
   newProj.classList.add("new-proj");
   newProj.classList.add("sidebar-tab");
+  //newProj.setAttribute("id", "new-proj-tab");
   newProj.textContent = "+ New Project";
   sidebar.appendChild(newProj);
 
@@ -100,53 +102,57 @@ function createSidebar() {
 
   //7.
   const allCompleted = document.createElement("button");
-  allCompleted.classList.add("sidebar-tab");
+  allCompleted.classList.add("sidebar-tab", "page-tab");
   allCompleted.setAttribute("id", "all-completed-tab");
   allCompleted.textContent = "All";
   sidebar.appendChild(allCompleted);
 
   //8.
-  allTab.addEventListener("click", () => {
-    clearContent();
-    AllTasksPage();
-  });
-
-  todayTab.addEventListener("click", () => {
-    clearContent();
-    todayPage();
-  });
-
-  weekTab.addEventListener("click", () => {
-    clearContent();
-    weekPage();
-  });
-
-  importantTab.addEventListener("click", () => {
-    clearContent();
-    importantPage();
-  });
-
-  unassigned.addEventListener("click", () => {
-    clearContent();
-    unassignedPage();
-  });
-
   newProj.addEventListener("click", () => {
     const projContainer = document.querySelector(".proj-container");
     if (!projContainer) {
       createNewProj();
     }
   });
+  /*
+  allTab.addEventListener("click", () => {
+    //clearContent();
+    AllTasksPage();
+  });
+
+  todayTab.addEventListener("click", () => {
+    //clearContent();
+    todayPage();
+  });
+
+  weekTab.addEventListener("click", () => {
+    //clearContent();
+    weekPage();
+  });
+
+  importantTab.addEventListener("click", () => {
+    //clearContent();
+    importantPage();
+  });
+
+  unassigned.addEventListener("click", () => {
+    //clearContent();
+    unassignedPage();
+  });
+
+  
 
   allCompleted.addEventListener("click", () => {
-    clearContent();
+    //clearContent();
     completedPage();
   });
+  */
 
   function newProjPage() {
     const pageHeader = document.createElement("h1");
     pageHeader.classList.add("page-header");
     pageHeader.textContent = "Important Tasks";
+
     mainContentContainer.appendChild(pageHeader);
 
     const importantTask = document.querySelector("#important-tab");
@@ -154,26 +160,31 @@ function createSidebar() {
     importantTask.style.color = "white";
   }
 
+  forEachBtn();
+  /*
   const btns = document.querySelectorAll(".sidebar-tab");
+  const mainContentContainer = document.querySelector(
+    ".main-content-container"
+  );
 
+    
+ 
   btns.forEach((button) => {
     console.log(button.classList);
+    mainContentContainer.style.visibility = "hidden";
     button.addEventListener("click", () => {
       btns.forEach((btn) => btn.classList.remove("active"));
-
+      mainContentContainer.style.visibility = "visible";
       button.classList.add("active");
     });
   });
+  */
 
   function clearContent() {
     const bodyContainer = document.querySelector("#body-container");
-    //const sidebar = document.querySelector(".sidebar");
     const mainContentContainer = document.querySelector(
       ".main-content-container"
     );
-    //if (sidebar) {
-    //  bodyContainer.removeChild(sidebar);
-    //}
 
     if (mainContentContainer) {
       bodyContainer.removeChild(mainContentContainer);

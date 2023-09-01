@@ -17,9 +17,10 @@ body {
 #header {
   display: flex;
   align-items: center;
-  height: clamp(100px, 20%, 175px);
+  height: 175px;
+  width: 100vw;
   background-color: var(--darkblue);
-  font-size: clamp(70px, 10vh, 10vh);
+  font-size: 8rem;
   color: white;
   padding-left: 25px;
 }
@@ -47,7 +48,7 @@ body {
 }
 
 .page-header {
-  font-size: clamp(52px, 7vh, 70px);
+  font-size: 4rem;
   border-bottom: 1px solid var(--darkblue);
   color: var(--darkblue);
 }
@@ -91,4 +92,12 @@ button:hover {
 .active {
   background-color: var(--darkblue);
   color: white;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
 }

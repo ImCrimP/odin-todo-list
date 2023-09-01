@@ -1,4 +1,5 @@
 import createSidebar from "./sidebar";
+import forEachBtn from "./forEach";
 function createNewProj() {
   let projArr = [];
   /*
@@ -80,10 +81,17 @@ function createNewProj() {
     newTab.textContent = tabName;
 
     newTab.addEventListener("click", () => {
-      clearContent();
+      //clearContent();
       const bodyContainer = document.querySelector("#body-container");
       const mainContentContainer = document.createElement("div");
-      mainContentContainer.classList.add("main-content-container");
+      mainContentContainer.classList.add(
+        "main-content-container",
+        "show-hide",
+        "hide"
+      );
+      const showHideContainer = document.createElement("div");
+      showHideContainer.classList.add("show-hide");
+      mainContentContainer.appendChild(showHideContainer);
       bodyContainer.appendChild(mainContentContainer);
 
       //create header for all tasks page
@@ -102,7 +110,7 @@ function createNewProj() {
     sidebar.removeChild(projContainer);
 
     newProj.parentNode.insertBefore(newTab, newProj);
-    highlightTab();
+    forEachBtn();
     addToArray();
     console.log(projArr);
   });
@@ -131,18 +139,6 @@ function createNewProj() {
 
     tabs.forEach((tab) => {
       projArr.push(tab);
-    });
-  }
-
-  function highlightTab() {
-    const btns = document.querySelectorAll(".sidebar-tab");
-
-    btns.forEach((button) => {
-      button.addEventListener("click", () => {
-        btns.forEach((btn) => btn.classList.remove("active"));
-
-        button.classList.add("active");
-      });
     });
   }
 }

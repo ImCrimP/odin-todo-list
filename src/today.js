@@ -7,7 +7,16 @@ function todayPage() {
   //add main content container so that is is to the right of sidebar
   const bodyContainer = document.querySelector("#body-container");
   const mainContentContainer = document.createElement("div");
-  mainContentContainer.classList.add("main-content-container");
+  mainContentContainer.classList.add(
+    "main-content-container",
+    "show-hide",
+    "hide"
+  );
+  mainContentContainer.setAttribute("id", "today-tab-page");
+  const showHideContainer = document.createElement("div");
+  showHideContainer.classList.add("show-hide");
+  mainContentContainer.appendChild(showHideContainer);
+
   bodyContainer.appendChild(mainContentContainer);
 
   //create header for all tasks page
@@ -15,12 +24,6 @@ function todayPage() {
   pageHeader.classList.add("page-header");
   pageHeader.textContent = "Today's Tasks";
   mainContentContainer.appendChild(pageHeader);
-
-  /*
-  const todayTask = document.querySelector("#today-tab");
-  todayTask.style.backgroundColor = "rgb(65, 72, 120)";
-  todayTask.style.color = "white";
-  */
 }
 
 export default todayPage;

@@ -7,7 +7,15 @@ function unassignedPage() {
   //add main content container so that is is to the right of sidebar
   const bodyContainer = document.querySelector("#body-container");
   const mainContentContainer = document.createElement("div");
-  mainContentContainer.classList.add("main-content-container");
+  mainContentContainer.setAttribute("id", "unassigned-tab-page");
+  mainContentContainer.classList.add(
+    "main-content-container",
+    "show-hide",
+    "hide"
+  );
+  const showHideContainer = document.createElement("div");
+  showHideContainer.classList.add("show-hide");
+  mainContentContainer.appendChild(showHideContainer);
   bodyContainer.appendChild(mainContentContainer);
 
   //create header for all tasks page
@@ -15,12 +23,6 @@ function unassignedPage() {
   pageHeader.classList.add("page-header");
   pageHeader.textContent = "Unassigned Tasks";
   mainContentContainer.appendChild(pageHeader);
-
-  /*
-  const unassignedProj = document.querySelector("#unassigned-tab");
-  unassignedProj.style.backgroundColor = "rgb(65, 72, 120)";
-  unassignedProj.style.color = "white";
-  */
 }
 
 export default unassignedPage;

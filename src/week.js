@@ -7,7 +7,15 @@ function weekPage() {
   //add main content container so that is is to the right of sidebar
   const bodyContainer = document.querySelector("#body-container");
   const mainContentContainer = document.createElement("div");
-  mainContentContainer.classList.add("main-content-container");
+  mainContentContainer.setAttribute("id", "week-tab-page");
+  mainContentContainer.classList.add(
+    "main-content-container",
+    "show-hide",
+    "hide"
+  );
+  const showHideContainer = document.createElement("div");
+  showHideContainer.classList.add("show-hide");
+  mainContentContainer.appendChild(showHideContainer);
   bodyContainer.appendChild(mainContentContainer);
 
   //create header for all tasks page
@@ -15,12 +23,6 @@ function weekPage() {
   pageHeader.classList.add("page-header");
   pageHeader.textContent = "Week's Tasks";
   mainContentContainer.appendChild(pageHeader);
-
-  /*
-  const weekTask = document.querySelector("#week-tab");
-  weekTask.style.backgroundColor = "rgb(65, 72, 120)";
-  weekTask.style.color = "white";
-  */
 }
 
 export default weekPage;
