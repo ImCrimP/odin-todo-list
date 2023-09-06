@@ -114,82 +114,52 @@ function createSidebar() {
       createNewProj();
     }
   });
-  /*
-  allTab.addEventListener("click", () => {
-    //clearContent();
-    AllTasksPage();
+
+  sidebar.addEventListener("click", (event) => {
+    const target = event.target;
+    if (target.classList.contains("sidebar-tab")) {
+      handleTabClick(target);
+    }
   });
 
-  todayTab.addEventListener("click", () => {
-    //clearContent();
-    todayPage();
+  const newProjSelect = document.querySelector(".new-proj");
+  newProjSelect.addEventListener("click", () => {
+    const projContainer = document.querySelector(".proj-container");
+    if (!projContainer) {
+      createNewProj();
+    }
   });
-
-  weekTab.addEventListener("click", () => {
-    //clearContent();
-    weekPage();
-  });
-
-  importantTab.addEventListener("click", () => {
-    //clearContent();
-    importantPage();
-  });
-
-  unassigned.addEventListener("click", () => {
-    //clearContent();
-    unassignedPage();
-  });
-
-  
-
-  allCompleted.addEventListener("click", () => {
-    //clearContent();
-    completedPage();
-  });
-  */
-
-  function newProjPage() {
-    const pageHeader = document.createElement("h1");
-    pageHeader.classList.add("page-header");
-    pageHeader.textContent = "Important Tasks";
-
-    mainContentContainer.appendChild(pageHeader);
-
-    const importantTask = document.querySelector("#important-tab");
-    importantTask.style.backgroundColor = "rgb(65, 72, 120)";
-    importantTask.style.color = "white";
-  }
 
   forEachBtn();
-  /*
-  const btns = document.querySelectorAll(".sidebar-tab");
-  const mainContentContainer = document.querySelector(
+}
+
+function handleTabClick(button) {
+  const pageId = `${button.id}-page`;
+  const page = document.querySelector(`#${pageId}`);
+
+  if (!page) {
+    return; // Exit if there is no corresponding page element
+  }
+
+  // Remove "active" class from all tab buttons
+  const tabButtons = document.querySelectorAll(".sidebar-tab");
+  tabButtons.forEach((btn) => {
+    btn.classList.remove("active");
+  });
+
+  // Show the selected page and mark the clicked tab as active
+  button.classList.add("active");
+
+  // Hide all main content containers
+  const mainContentContainers = document.querySelectorAll(
     ".main-content-container"
   );
-
-    
- 
-  btns.forEach((button) => {
-    console.log(button.classList);
-    mainContentContainer.style.visibility = "hidden";
-    button.addEventListener("click", () => {
-      btns.forEach((btn) => btn.classList.remove("active"));
-      mainContentContainer.style.visibility = "visible";
-      button.classList.add("active");
-    });
+  mainContentContainers.forEach((container) => {
+    container.classList.add("hide");
   });
-  */
 
-  function clearContent() {
-    const bodyContainer = document.querySelector("#body-container");
-    const mainContentContainer = document.querySelector(
-      ".main-content-container"
-    );
-
-    if (mainContentContainer) {
-      bodyContainer.removeChild(mainContentContainer);
-    }
-  }
+  // Show the selected page
+  page.classList.remove("hide");
 }
 
 export default createSidebar;

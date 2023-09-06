@@ -13,9 +13,6 @@ function todayPage() {
     "hide"
   );
   mainContentContainer.setAttribute("id", "today-tab-page");
-  const showHideContainer = document.createElement("div");
-  showHideContainer.classList.add("show-hide");
-  mainContentContainer.appendChild(showHideContainer);
 
   bodyContainer.appendChild(mainContentContainer);
 

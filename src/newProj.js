@@ -2,49 +2,12 @@ import createSidebar from "./sidebar";
 import forEachBtn from "./forEach";
 function createNewProj() {
   let projArr = [];
-  /*
-  console.log(projArr);
-  class Project {
-    constructor(name) {
-      this.name = name;
-    }
-    printName() {
-      console.log(this.name, "is my name");
-    }
-  }
-
-  class Projects {
-    constructor() {
-      this.projects = [];
-    }
-
-    createDiv(name) {
-      //const newProjTab = document.createElement("button");
-      //newProjTab.classList.add("sidebar-tab");
-      //newProjTab.setAttribute("id", name);
-      //newProjTab.textContent = name;
-      //newProj.parentNode.insertBefore(newProjTab, newProj);
-
-      let p = new Project(name);
-      this.projects.push(p);
-      console.log(this.projects.length);
-      console.log(p);
-      return p;
-    }
-
-    get allProjects() {
-      return this.projects;
-    }
-
-    get numberOfProjects() {
-      return this.projects.length;
-    }
-  }
-*/
 
   const sidebar = document.querySelector(".sidebar");
+
   //get new project element
   const newProj = document.querySelector(".new-proj");
+
   //create a new element for input
   const projContainer = document.createElement("div");
   projContainer.classList.add("proj-container");
@@ -74,43 +37,36 @@ function createNewProj() {
 
   addBtn.addEventListener("click", () => {
     const tabName = projInput.value;
+    console.log(tabName);
+
+    const tabNameDash = tabName.replace(/\s+/g, "-");
+    console.log(tabName);
 
     const newTab = document.createElement("button");
     newTab.classList.add("sidebar-tab", "new-tab");
-    newTab.setAttribute("id", tabName);
+    newTab.setAttribute("id", `${tabNameDash}-tab`);
     newTab.textContent = tabName;
 
-    newTab.addEventListener("click", () => {
-      //clearContent();
-      const bodyContainer = document.querySelector("#body-container");
-      const mainContentContainer = document.createElement("div");
-      mainContentContainer.classList.add(
-        "main-content-container",
-        "show-hide",
-        "hide"
-      );
-      const showHideContainer = document.createElement("div");
-      showHideContainer.classList.add("show-hide");
-      mainContentContainer.appendChild(showHideContainer);
-      bodyContainer.appendChild(mainContentContainer);
+    const bodyContainer = document.querySelector("#body-container");
+    const mainContentContainer = document.createElement("div");
+    mainContentContainer.setAttribute("id", `${tabNameDash}-tab-page`);
+    mainContentContainer.classList.add(
+      "main-content-container",
+      "show-hide",
+      "hide"
+    );
 
-      //create header for all tasks page
-      const pageHeader = document.createElement("h1");
-      pageHeader.classList.add("page-header");
-      pageHeader.textContent = `${tabName}`;
-      mainContentContainer.appendChild(pageHeader);
+    bodyContainer.appendChild(mainContentContainer);
 
-      /*
-      const weekTask = document.querySelector("#week-tab");
-      weekTask.style.backgroundColor = "rgb(65, 72, 120)";
-      weekTask.style.color = "white";
-      */
-    });
+    //create header for all tasks page
+    const pageHeader = document.createElement("h1");
+    pageHeader.classList.add("page-header");
+    pageHeader.textContent = `${tabName}`;
+    mainContentContainer.appendChild(pageHeader);
 
     sidebar.removeChild(projContainer);
 
     newProj.parentNode.insertBefore(newTab, newProj);
-    forEachBtn();
     addToArray();
     console.log(projArr);
   });
@@ -119,21 +75,6 @@ function createNewProj() {
     sidebar.removeChild(projContainer);
   });
 
-  function clearContent() {
-    const bodyContainer = document.querySelector("#body-container");
-    //const sidebar = document.querySelector(".sidebar");
-    const mainContentContainer = document.querySelector(
-      ".main-content-container"
-    );
-    //if (sidebar) {
-    //  bodyContainer.removeChild(sidebar);
-    //}
-
-    if (mainContentContainer) {
-      bodyContainer.removeChild(mainContentContainer);
-    }
-  }
-
   function addToArray() {
     const tabs = document.querySelectorAll(".new-tab");
 
@@ -141,6 +82,8 @@ function createNewProj() {
       projArr.push(tab);
     });
   }
+
+  forEachBtn();
 }
 
 export default createNewProj;
