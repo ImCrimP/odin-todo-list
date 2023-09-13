@@ -22,12 +22,37 @@ function AllTasksPage() {
   mainContentContainer.appendChild(pageHeader);
 
   const addTask = document.createElement("button");
-  addTask.classList.add("page-button");
+  addTask.classList.add("add-task");
+  addTask.setAttribute("id", "all-tasks-add-btn");
   addTask.textContent = "+ Add Task";
   mainContentContainer.appendChild(addTask);
 
-  //add task event listener
-  addTask.addEventListener("click", () => {});
+  // Check if the event listener is already attached before adding it
+
+  if (!addTask.hasEventListener) {
+    addTask.hasEventListener = true;
+
+    addTask.addEventListener("click", () => {
+      const taskName = prompt("Enter task name:");
+      if (taskName) {
+        const taskElement = document.createElement("button");
+        taskElement.classList.add("task");
+        taskElement.textContent = taskName;
+
+        const delBtn = document.createElement("button");
+        delBtn.classList.add("del-task");
+        delBtn.textContent = "Delete";
+
+        taskElement.appendChild(delBtn);
+
+        addTask.parentNode.insertBefore(taskElement, addTask);
+        delBtn.addEventListener("click", () => {
+          taskElement.removeChild(delBtn);
+          addTask.parentNode.removeChild(taskElement);
+        });
+      }
+    });
+  }
 }
 
 export default AllTasksPage;

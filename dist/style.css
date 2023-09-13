@@ -42,6 +42,8 @@ body {
 }
 
 .main-content-container {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   padding-left: 25px;
   padding-right: 25px;
@@ -100,4 +102,15 @@ button:hover {
 
 .show {
   display: block;
+}
+
+.task {
+  display: flex;
+  justify-content: space-between;
+  background-color: lightblue;
+}
+
+.del-task {
+  background-color: var(--darkblue);
+  color: white;
 }
