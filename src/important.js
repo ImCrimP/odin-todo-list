@@ -18,6 +18,7 @@ function importantPage() {
   //create header for all tasks page
   const pageHeader = document.createElement("h1");
   pageHeader.classList.add("page-header");
+  pageHeader.setAttribute("id", "important-header");
   pageHeader.textContent = "Important Tasks";
   mainContentContainer.appendChild(pageHeader);
 

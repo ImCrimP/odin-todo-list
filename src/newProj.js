@@ -1,6 +1,7 @@
 import createSidebar from "./sidebar";
 import forEachBtn from "./forEach";
 import addTask from "./createTask";
+import importantPage from "./important";
 function createNewProj() {
   let projArr = [];
 
@@ -50,6 +51,10 @@ function createNewProj() {
 
     console.log(tabNameDash);
 
+    if (tabName == "" || tabName.charAt(0) == " ") {
+      alert("Enter a valid name");
+      return;
+    }
     const newTab = document.createElement("button");
     newTab.classList.add("sidebar-tab", "new-tab");
     newTab.setAttribute("id", `${tabNameDash}-tab`);
@@ -99,8 +104,11 @@ function createNewProj() {
         taskElement.textContent = taskName;
         cloneToAll.textContent = taskName;
 
-        //mainContentContainer.appendChild(taskElement);
-        //allPage.appendChild(cloneToAll);
+        const taskEditContainer = document.createElement("div");
+        taskElement.appendChild(taskEditContainer);
+
+        const cloneTaskEditContainer = document.createElement("div");
+        cloneToAll.appendChild(cloneTaskEditContainer);
 
         const delBtn = document.createElement("button");
         delBtn.classList.add("del-task");
@@ -110,24 +118,98 @@ function createNewProj() {
         cloneDelBtn.classList.add("del-task");
         cloneDelBtn.textContent = "Delete";
 
-        cloneToAll.appendChild(cloneDelBtn);
-        taskElement.appendChild(delBtn);
+        cloneTaskEditContainer.appendChild(cloneDelBtn);
+        taskEditContainer.appendChild(delBtn);
+
+        const importantBtn = document.createElement("button");
+        importantBtn.classList.add("important-toggle");
+        importantBtn.textContent = "Important";
+
+        const cloneImportantBtn = document.createElement("button");
+        cloneImportantBtn.classList.add("important-toggle");
+
+        cloneImportantBtn.textContent = "Important";
+
+        cloneTaskEditContainer.appendChild(cloneImportantBtn);
+        taskEditContainer.appendChild(importantBtn);
 
         addTaskBtn.parentNode.insertBefore(taskElement, addTaskBtn);
         allTasksPageBtn.parentNode.insertBefore(cloneToAll, allTasksPageBtn);
 
         delBtn.addEventListener("click", () => {
-          taskElement.removeChild(delBtn);
+          taskElement.removeChild(taskEditContainer);
           addTaskBtn.parentNode.removeChild(taskElement);
-          cloneToAll.removeChild(cloneDelBtn);
+          cloneToAll.removeChild(cloneTaskEditContainer);
           allTasksPageBtn.parentNode.removeChild(cloneToAll);
         });
 
         cloneDelBtn.addEventListener("click", () => {
-          taskElement.removeChild(delBtn);
+          taskElement.removeChild(taskEditContainer);
           addTaskBtn.parentNode.removeChild(taskElement);
-          cloneToAll.removeChild(cloneDelBtn);
+          cloneToAll.removeChild(cloneTaskEditContainer);
           allTasksPageBtn.parentNode.removeChild(cloneToAll);
+        });
+
+        const impPage = document.querySelector("#importatn-tab-page");
+        const impTask = document.createElement("button");
+        impTask.classList.add("task");
+        impTask.textContent = taskName;
+
+        const impContainer = document.createElement("div");
+        impTask.appendChild(impContainer);
+
+        const impDel = document.createElement("button");
+        impDel.classList.add("del-task");
+        impDel.textContent = "Delete";
+
+        impContainer.appendChild(impDel);
+        const impImpBtn = document.createElement("button");
+        impImpBtn.classList.add("important-toggle");
+        impImpBtn.textContent = "Important";
+        impContainer.appendChild(impImpBtn);
+
+        const impHeader = document.querySelector("#important-header");
+
+        importantBtn.addEventListener("click", () => {
+          if (importantBtn.classList.contains("toggle-on")) {
+            importantBtn.classList.remove("toggle-on");
+            cloneImportantBtn.classList.remove("toggle-on");
+            impHeader.parentNode.removeChild(impTask);
+          } else {
+            importantBtn.classList.add("toggle-on");
+            cloneImportantBtn.classList.add("toggle-on");
+
+            impHeader.parentNode.appendChild(impTask);
+            impImpBtn.classList.add("toggle-on");
+          }
+        });
+
+        cloneImportantBtn.addEventListener("click", () => {
+          if (importantBtn.classList.contains("toggle-on")) {
+            importantBtn.classList.remove("toggle-on");
+            cloneImportantBtn.classList.remove("toggle-on");
+            impHeader.parentNode.removeChild(impTask);
+          } else {
+            importantBtn.classList.add("toggle-on");
+            cloneImportantBtn.classList.add("toggle-on");
+
+            impHeader.parentNode.appendChild(impTask);
+            impImpBtn.classList.add("toggle-on");
+          }
+        });
+
+        impImpBtn.addEventListener("click", () => {
+          if (importantBtn.classList.contains("toggle-on")) {
+            importantBtn.classList.remove("toggle-on");
+            cloneImportantBtn.classList.remove("toggle-on");
+            impHeader.parentNode.removeChild(impTask);
+          } else {
+            importantBtn.classList.add("toggle-on");
+            cloneImportantBtn.classList.add("toggle-on");
+
+            impHeader.parentNode.appendChild(impTask);
+            impImpBtn.classList.add("toggle-on");
+          }
         });
       }
     });

@@ -114,3 +114,17 @@ button:hover {
   background-color: var(--darkblue);
   color: white;
 }
+
+.taskBtn {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+}
+
+.important-toggle {
+  background-color: var(--gray);
+}
+
+.toggle-on {
+  background-color: rgb(255, 242, 0);
+}

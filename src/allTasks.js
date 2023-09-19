@@ -39,16 +39,32 @@ function AllTasksPage() {
         taskElement.classList.add("task");
         taskElement.textContent = taskName;
 
+        const taskEditContainer = document.createElement("div");
+        taskElement.appendChild(taskEditContainer);
+
         const delBtn = document.createElement("button");
         delBtn.classList.add("del-task");
         delBtn.textContent = "Delete";
 
-        taskElement.appendChild(delBtn);
+        const importantBtn = document.createElement("button");
+        importantBtn.classList.add("important-toggle");
+        importantBtn.textContent = "Important";
+
+        taskEditContainer.appendChild(delBtn);
+        taskEditContainer.appendChild(importantBtn);
 
         addTask.parentNode.insertBefore(taskElement, addTask);
         delBtn.addEventListener("click", () => {
-          taskElement.removeChild(delBtn);
+          taskElement.removeChild(taskEditContainer);
           addTask.parentNode.removeChild(taskElement);
+        });
+
+        importantBtn.addEventListener("click", () => {
+          if (importantBtn.classList.contains("toggle-on")) {
+            importantBtn.classList.remove("toggle-on");
+          } else {
+            importantBtn.classList.add("toggle-on");
+          }
         });
       }
     });
