@@ -2,6 +2,7 @@ import createSidebar from "./sidebar";
 import forEachBtn from "./forEach";
 import addTask from "./createTask";
 import importantPage from "./important";
+
 function createNewProj() {
   let projArr = [];
 
@@ -49,6 +50,8 @@ function createNewProj() {
       tabNameDash = tabName;
     }
 
+    tabNameDash = sanitizeForId(tabNameDash);
+
     console.log(tabNameDash);
 
     if (tabName == "" || tabName.charAt(0) == " ") {
@@ -84,7 +87,7 @@ function createNewProj() {
     console.log(projArr);
 
     const addTaskBtn = document.createElement("button");
-    const allTasksPageBtn = document.querySelector("#all-tasks-add-btn");
+    const allTasksPageBtn = document.querySelector("#all-page-header");
     addTaskBtn.textContent = "+ Add Task";
     addTaskBtn.setAttribute("id", `${tabNameDash}-add-task`);
     addTaskBtn.classList.add("add-task");
@@ -118,9 +121,6 @@ function createNewProj() {
         cloneDelBtn.classList.add("del-task");
         cloneDelBtn.textContent = "Delete";
 
-        cloneTaskEditContainer.appendChild(cloneDelBtn);
-        taskEditContainer.appendChild(delBtn);
-
         const importantBtn = document.createElement("button");
         importantBtn.classList.add("important-toggle");
         importantBtn.textContent = "Important";
@@ -132,15 +132,20 @@ function createNewProj() {
 
         cloneTaskEditContainer.appendChild(cloneImportantBtn);
         taskEditContainer.appendChild(importantBtn);
+        cloneTaskEditContainer.appendChild(cloneDelBtn);
+        taskEditContainer.appendChild(delBtn);
 
         addTaskBtn.parentNode.insertBefore(taskElement, addTaskBtn);
-        allTasksPageBtn.parentNode.insertBefore(cloneToAll, allTasksPageBtn);
+        allTasksPageBtn.parentNode.appendChild(cloneToAll);
 
         delBtn.addEventListener("click", () => {
           taskElement.removeChild(taskEditContainer);
           addTaskBtn.parentNode.removeChild(taskElement);
           cloneToAll.removeChild(cloneTaskEditContainer);
           allTasksPageBtn.parentNode.removeChild(cloneToAll);
+          if (impHeader.parentNode.contains(impTask)) {
+            impHeader.parentNode.removeChild(impTask);
+          }
         });
 
         cloneDelBtn.addEventListener("click", () => {
@@ -148,6 +153,9 @@ function createNewProj() {
           addTaskBtn.parentNode.removeChild(taskElement);
           cloneToAll.removeChild(cloneTaskEditContainer);
           allTasksPageBtn.parentNode.removeChild(cloneToAll);
+          if (impHeader.parentNode.contains(impTask)) {
+            impHeader.parentNode.removeChild(impTask);
+          }
         });
 
         const impPage = document.querySelector("#importatn-tab-page");
@@ -162,11 +170,11 @@ function createNewProj() {
         impDel.classList.add("del-task");
         impDel.textContent = "Delete";
 
-        impContainer.appendChild(impDel);
         const impImpBtn = document.createElement("button");
         impImpBtn.classList.add("important-toggle");
         impImpBtn.textContent = "Important";
         impContainer.appendChild(impImpBtn);
+        impContainer.appendChild(impDel);
 
         const impHeader = document.querySelector("#important-header");
 
@@ -211,6 +219,13 @@ function createNewProj() {
             impImpBtn.classList.add("toggle-on");
           }
         });
+
+        impDel.addEventListener("click", () => {
+          addTaskBtn.parentNode.removeChild(taskElement);
+          cloneToAll.removeChild(cloneTaskEditContainer);
+          allTasksPageBtn.parentNode.removeChild(cloneToAll);
+          impHeader.parentNode.removeChild(impTask);
+        });
       }
     });
   });
@@ -228,6 +243,19 @@ function createNewProj() {
   }
 
   forEachBtn();
+
+  function sanitizeForId(input) {
+    // Remove any characters that are not letters, digits, hyphens, or underscores
+    const sanitizedInput = input.replace(/[^A-Za-z0-9-_]/g, "");
+
+    // Ensure the ID starts with a letter or underscore
+    if (/^[^A-Za-z_]/.test(sanitizedInput)) {
+      // Prefix the ID with an underscore if it doesn't start with a valid character
+      return "_" + sanitizedInput;
+    }
+
+    return sanitizedInput;
+  }
 }
 
 export default createNewProj;

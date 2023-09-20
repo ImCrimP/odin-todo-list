@@ -18,9 +18,11 @@ function AllTasksPage() {
   //create header for all tasks page
   const pageHeader = document.createElement("h1");
   pageHeader.classList.add("page-header");
+  pageHeader.setAttribute("id", "all-page-header");
   pageHeader.textContent = "All Tasks";
   mainContentContainer.appendChild(pageHeader);
 
+  /*
   const addTask = document.createElement("button");
   addTask.classList.add("add-task");
   addTask.setAttribute("id", "all-tasks-add-btn");
@@ -50,25 +52,68 @@ function AllTasksPage() {
         importantBtn.classList.add("important-toggle");
         importantBtn.textContent = "Important";
 
-        taskEditContainer.appendChild(delBtn);
         taskEditContainer.appendChild(importantBtn);
+        taskEditContainer.appendChild(delBtn);
 
         addTask.parentNode.insertBefore(taskElement, addTask);
         delBtn.addEventListener("click", () => {
           taskElement.removeChild(taskEditContainer);
           addTask.parentNode.removeChild(taskElement);
+          impHeader.parentNode.removeChild(impTask);
         });
+
+        const impPage = document.querySelector("#importatn-tab-page");
+        const impTask = document.createElement("button");
+        impTask.classList.add("task");
+        impTask.textContent = taskName;
+
+        const impContainer = document.createElement("div");
+        impTask.appendChild(impContainer);
+
+        const impDel = document.createElement("button");
+        impDel.classList.add("del-task");
+        impDel.textContent = "Delete";
+
+        const impImpBtn = document.createElement("button");
+        impImpBtn.classList.add("important-toggle");
+        impImpBtn.textContent = "Important";
+        impContainer.appendChild(impImpBtn);
+        impContainer.appendChild(impDel);
+
+        const impHeader = document.querySelector("#important-header");
 
         importantBtn.addEventListener("click", () => {
           if (importantBtn.classList.contains("toggle-on")) {
             importantBtn.classList.remove("toggle-on");
+            impHeader.parentNode.removeChild(impTask);
           } else {
             importantBtn.classList.add("toggle-on");
+            impHeader.parentNode.appendChild(impTask);
+            impImpBtn.classList.add("toggle-on");
           }
+        });
+
+        impImpBtn.addEventListener("click", () => {
+          if (importantBtn.classList.contains("toggle-on")) {
+            importantBtn.classList.remove("toggle-on");
+
+            impHeader.parentNode.removeChild(impTask);
+          } else {
+            importantBtn.classList.add("toggle-on");
+
+            impHeader.parentNode.appendChild(impTask);
+            impImpBtn.classList.add("toggle-on");
+          }
+        });
+
+        impDel.addEventListener("click", () => {
+          addTask.parentNode.removeChild(taskElement);
+          impHeader.parentNode.removeChild(impTask);
         });
       }
     });
   }
+  */
 }
 
 export default AllTasksPage;
