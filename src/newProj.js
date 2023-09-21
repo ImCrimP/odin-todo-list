@@ -108,9 +108,11 @@ function createNewProj() {
         cloneToAll.textContent = taskName;
 
         const taskEditContainer = document.createElement("div");
+        taskEditContainer.classList.add("task-btns-container");
         taskElement.appendChild(taskEditContainer);
 
         const cloneTaskEditContainer = document.createElement("div");
+        cloneTaskEditContainer.classList.add("task-btns-container");
         cloneToAll.appendChild(cloneTaskEditContainer);
 
         const delBtn = document.createElement("button");
@@ -130,33 +132,29 @@ function createNewProj() {
 
         cloneImportantBtn.textContent = "Important";
 
+        const complete = document.createElement("button");
+        complete.classList.add("incomplete");
+        complete.textContent = "Incomplete";
+
+        const cloneComplete = document.createElement("button");
+        cloneComplete.classList.add("incomplete");
+        cloneComplete.textContent = "Incomplete";
+
+        const impComplete = document.createElement("button");
+        impComplete.classList.add("incomplete");
+        impComplete.textContent = "Incomplete";
+
         cloneTaskEditContainer.appendChild(cloneImportantBtn);
         taskEditContainer.appendChild(importantBtn);
+
+        cloneTaskEditContainer.appendChild(cloneComplete);
+        taskEditContainer.appendChild(complete);
+
         cloneTaskEditContainer.appendChild(cloneDelBtn);
         taskEditContainer.appendChild(delBtn);
 
         addTaskBtn.parentNode.insertBefore(taskElement, addTaskBtn);
         allTasksPageBtn.parentNode.appendChild(cloneToAll);
-
-        delBtn.addEventListener("click", () => {
-          taskElement.removeChild(taskEditContainer);
-          addTaskBtn.parentNode.removeChild(taskElement);
-          cloneToAll.removeChild(cloneTaskEditContainer);
-          allTasksPageBtn.parentNode.removeChild(cloneToAll);
-          if (impHeader.parentNode.contains(impTask)) {
-            impHeader.parentNode.removeChild(impTask);
-          }
-        });
-
-        cloneDelBtn.addEventListener("click", () => {
-          taskElement.removeChild(taskEditContainer);
-          addTaskBtn.parentNode.removeChild(taskElement);
-          cloneToAll.removeChild(cloneTaskEditContainer);
-          allTasksPageBtn.parentNode.removeChild(cloneToAll);
-          if (impHeader.parentNode.contains(impTask)) {
-            impHeader.parentNode.removeChild(impTask);
-          }
-        });
 
         const impPage = document.querySelector("#importatn-tab-page");
         const impTask = document.createElement("button");
@@ -164,6 +162,7 @@ function createNewProj() {
         impTask.textContent = taskName;
 
         const impContainer = document.createElement("div");
+        impContainer.classList.add("task-btns-container");
         impTask.appendChild(impContainer);
 
         const impDel = document.createElement("button");
@@ -174,9 +173,115 @@ function createNewProj() {
         impImpBtn.classList.add("important-toggle");
         impImpBtn.textContent = "Important";
         impContainer.appendChild(impImpBtn);
+        impContainer.appendChild(impComplete);
         impContainer.appendChild(impDel);
 
         const impHeader = document.querySelector("#important-header");
+
+        //TODO: create stuff for compelted page (task, buttons, etc.)
+        const compPageTask = document.createElement("button");
+        compPageTask.classList.add("task");
+        compPageTask.textContent = taskName;
+
+        const compPageContainer = document.createElement("div");
+        compPageContainer.classList.add("task-btns-container");
+        compPageTask.appendChild(compPageContainer);
+
+        const compPageDel = document.createElement("button");
+        compPageDel.classList.add("del-task");
+        compPageDel.textContent = "Delete";
+
+        const compPageComplete = document.createElement("button");
+        compPageComplete.classList.add("incomplete");
+        compPageComplete.textContent = "Incomplete";
+
+        const compPageImportant = document.createElement("button");
+        compPageImportant.classList.add("important-toggle");
+        compPageImportant.textContent = "Important";
+        compPageContainer.appendChild(compPageImportant);
+        compPageContainer.appendChild(compPageComplete);
+        compPageContainer.appendChild(compPageDel);
+
+        const compHeader = document.querySelector("#comp-header");
+
+        //Complete buttons on click
+
+        complete.addEventListener("click", () => {
+          if (complete.classList.contains("complete")) {
+            complete.classList.remove("complete");
+            complete.textContent = "Incomplete";
+            cloneComplete.classList.remove("complete");
+            cloneComplete.textContent = "Incomplete";
+            impComplete.classList.remove("complete");
+            impComplete.textContent = "Incomplete";
+            if (compHeader.parentNode.contains(compPageTask)) {
+              compHeader.parentElement.removeChild(compPageTask);
+            }
+          } else {
+            complete.classList.add("complete");
+            complete.textContent = "Complete";
+            cloneComplete.classList.add("complete");
+            cloneComplete.textContent = "Complete";
+            impComplete.classList.add("complete");
+            impComplete.textContent = "Complete";
+
+            compPageComplete.classList.add("complete");
+            compPageComplete.textContent = "Complete";
+            compHeader.parentElement.appendChild(compPageTask);
+          }
+        });
+
+        cloneComplete.addEventListener("click", () => {
+          if (complete.classList.contains("complete")) {
+            complete.classList.remove("complete");
+            complete.textContent = "Incomplete";
+            cloneComplete.classList.remove("complete");
+            cloneComplete.textContent = "Incomplete";
+            impComplete.classList.remove("complete");
+            impComplete.textContent = "Incomplete";
+            if (compHeader.parentNode.contains(compPageTask)) {
+              compHeader.parentElement.removeChild(compPageTask);
+            }
+          } else {
+            complete.classList.add("complete");
+            complete.textContent = "Complete";
+            cloneComplete.classList.add("complete");
+            cloneComplete.textContent = "Complete";
+            impComplete.classList.add("complete");
+            impComplete.textContent = "Complete";
+
+            compPageComplete.classList.add("complete");
+            compPageComplete.textContent = "Complete";
+            compHeader.parentElement.appendChild(compPageTask);
+          }
+        });
+
+        impComplete.addEventListener("click", () => {
+          if (complete.classList.contains("complete")) {
+            complete.classList.remove("complete");
+            complete.textContent = "Incomplete";
+            cloneComplete.classList.remove("complete");
+            cloneComplete.textContent = "Incomplete";
+            impComplete.classList.remove("complete");
+            impComplete.textContent = "Incomplete";
+            if (compHeader.parentNode.contains(compPageTask)) {
+              compHeader.parentElement.removeChild(compPageTask);
+            }
+          } else {
+            complete.classList.add("complete");
+            complete.textContent = "Complete";
+            cloneComplete.classList.add("complete");
+            cloneComplete.textContent = "Complete";
+            impComplete.classList.add("complete");
+            impComplete.textContent = "Complete";
+
+            compPageComplete.classList.add("complete");
+            compPageComplete.textContent = "Complete";
+            compHeader.parentElement.appendChild(compPageTask);
+          }
+        });
+
+        //Important buttons on click
 
         importantBtn.addEventListener("click", () => {
           if (importantBtn.classList.contains("toggle-on")) {
@@ -217,6 +322,28 @@ function createNewProj() {
 
             impHeader.parentNode.appendChild(impTask);
             impImpBtn.classList.add("toggle-on");
+          }
+        });
+
+        //Delete Buttons on click
+
+        delBtn.addEventListener("click", () => {
+          taskElement.removeChild(taskEditContainer);
+          addTaskBtn.parentNode.removeChild(taskElement);
+          cloneToAll.removeChild(cloneTaskEditContainer);
+          allTasksPageBtn.parentNode.removeChild(cloneToAll);
+          if (impHeader.parentNode.contains(impTask)) {
+            impHeader.parentNode.removeChild(impTask);
+          }
+        });
+
+        cloneDelBtn.addEventListener("click", () => {
+          taskElement.removeChild(taskEditContainer);
+          addTaskBtn.parentNode.removeChild(taskElement);
+          cloneToAll.removeChild(cloneTaskEditContainer);
+          allTasksPageBtn.parentNode.removeChild(cloneToAll);
+          if (impHeader.parentNode.contains(impTask)) {
+            impHeader.parentNode.removeChild(impTask);
           }
         });
 

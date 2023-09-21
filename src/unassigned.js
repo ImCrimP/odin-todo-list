@@ -45,6 +45,7 @@ function unassignedPage() {
         taskElement.textContent = taskName;
 
         const taskEditContainer = document.createElement("div");
+        taskEditContainer.classList.add("task-btns-container");
         taskElement.appendChild(taskEditContainer);
 
         const delBtn = document.createElement("button");
@@ -55,10 +56,24 @@ function unassignedPage() {
         importantBtn.classList.add("important-toggle");
         importantBtn.textContent = "Important";
 
+        const complete = document.createElement("button");
+        complete.classList.add("incomplete");
+        complete.textContent = "Incomplete";
+
+        const cloneComplete = document.createElement("button");
+        cloneComplete.classList.add("incomplete");
+        cloneComplete.textContent = "Incomplete";
+
+        const impComplete = document.createElement("button");
+        impComplete.classList.add("incomplete");
+        impComplete.textContent = "Incomplete";
+
         taskEditContainer.appendChild(importantBtn);
+        taskEditContainer.appendChild(complete);
         taskEditContainer.appendChild(delBtn);
 
         addTask.parentNode.insertBefore(taskElement, addTask);
+
         delBtn.addEventListener("click", () => {
           addTask.parentNode.removeChild(taskElement);
           cloneToAll.removeChild(cloneTaskEditContainer);
@@ -74,6 +89,7 @@ function unassignedPage() {
         cloneToAll.textContent = taskName;
 
         const cloneTaskEditContainer = document.createElement("div");
+        cloneTaskEditContainer.classList.add("task-btns-container");
         cloneToAll.appendChild(cloneTaskEditContainer);
 
         const allTasksPageBtn = document.querySelector("#all-page-header");
@@ -86,6 +102,7 @@ function unassignedPage() {
         impTask.textContent = taskName;
 
         const impContainer = document.createElement("div");
+        impContainer.classList.add("task-btns-container");
         impTask.appendChild(impContainer);
 
         const impDel = document.createElement("button");
@@ -96,6 +113,7 @@ function unassignedPage() {
         impImpBtn.classList.add("important-toggle");
         impImpBtn.textContent = "Important";
         impContainer.appendChild(impImpBtn);
+        impContainer.appendChild(impComplete);
         impContainer.appendChild(impDel);
 
         const cloneDelBtn = document.createElement("button");
@@ -108,9 +126,112 @@ function unassignedPage() {
         cloneImportantBtn.textContent = "Important";
 
         cloneTaskEditContainer.appendChild(cloneImportantBtn);
+        cloneTaskEditContainer.appendChild(cloneComplete);
         cloneTaskEditContainer.appendChild(cloneDelBtn);
 
         const impHeader = document.querySelector("#important-header");
+
+        //TODO: create stuff for compelted page (task, buttons, etc.)
+        const compPageTask = document.createElement("button");
+        compPageTask.classList.add("task");
+        compPageTask.textContent = taskName;
+
+        const compPageContainer = document.createElement("div");
+        compPageContainer.classList.add("task-btns-container");
+        compPageTask.appendChild(compPageContainer);
+
+        const compPageDel = document.createElement("button");
+        compPageDel.classList.add("del-task");
+        compPageDel.textContent = "Delete";
+
+        const compPageComplete = document.createElement("button");
+        compPageComplete.classList.add("incomplete");
+        compPageComplete.textContent = "Incomplete";
+
+        const compPageImportant = document.createElement("button");
+        compPageImportant.classList.add("important-toggle");
+        compPageImportant.textContent = "Important";
+        compPageContainer.appendChild(compPageImportant);
+        compPageContainer.appendChild(compPageComplete);
+        compPageContainer.appendChild(compPageDel);
+
+        const compHeader = document.querySelector("#comp-header");
+
+        complete.addEventListener("click", () => {
+          if (complete.classList.contains("complete")) {
+            complete.classList.remove("complete");
+            complete.textContent = "Incomplete";
+            cloneComplete.classList.remove("complete");
+            cloneComplete.textContent = "Incomplete";
+            impComplete.classList.remove("complete");
+            impComplete.textContent = "Incomplete";
+
+            if (compHeader.parentNode.contains(compPageTask)) {
+              compHeader.parentElement.removeChild(compPageTask);
+            }
+          } else {
+            complete.classList.add("complete");
+            complete.textContent = "Complete";
+            cloneComplete.classList.add("complete");
+            cloneComplete.textContent = "Complete";
+            impComplete.classList.add("complete");
+            impComplete.textContent = "Complete";
+
+            compPageComplete.classList.add("complete");
+            compPageComplete.textContent = "Complete";
+            compHeader.parentElement.appendChild(compPageTask);
+          }
+        });
+
+        cloneComplete.addEventListener("click", () => {
+          if (complete.classList.contains("complete")) {
+            complete.classList.remove("complete");
+            complete.textContent = "Incomplete";
+            cloneComplete.classList.remove("complete");
+            cloneComplete.textContent = "Incomplete";
+            impComplete.classList.remove("complete");
+            impComplete.textContent = "Incomplete";
+            if (compHeader.parentNode.contains(compPageTask)) {
+              compHeader.parentElement.removeChild(compPageTask);
+            }
+          } else {
+            complete.classList.add("complete");
+            complete.textContent = "Complete";
+            cloneComplete.classList.add("complete");
+            cloneComplete.textContent = "Complete";
+            impComplete.classList.add("complete");
+            impComplete.textContent = "Complete";
+
+            compPageComplete.classList.add("complete");
+            compPageComplete.textContent = "Complete";
+            compHeader.parentElement.appendChild(compPageTask);
+          }
+        });
+
+        impComplete.addEventListener("click", () => {
+          if (complete.classList.contains("complete")) {
+            complete.classList.remove("complete");
+            complete.textContent = "Incomplete";
+            cloneComplete.classList.remove("complete");
+            cloneComplete.textContent = "Incomplete";
+            impComplete.classList.remove("complete");
+            impComplete.textContent = "Incomplete";
+            if (compHeader.parentNode.contains(compPageTask)) {
+              compHeader.parentElement.removeChild(compPageTask);
+            }
+          } else {
+            complete.classList.add("complete");
+            complete.textContent = "Complete";
+            cloneComplete.classList.add("complete");
+            cloneComplete.textContent = "Complete";
+            impComplete.classList.add("complete");
+            impComplete.textContent = "Complete";
+
+            compPageComplete.classList.add("complete");
+            compPageComplete.textContent = "Complete";
+            compHeader.parentElement.appendChild(compPageTask);
+          }
+        });
 
         importantBtn.addEventListener("click", () => {
           if (importantBtn.classList.contains("toggle-on")) {

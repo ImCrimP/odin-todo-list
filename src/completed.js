@@ -18,6 +18,7 @@ function completedPage() {
   //create header for all tasks page
   const pageHeader = document.createElement("h1");
   pageHeader.classList.add("page-header");
+  pageHeader.setAttribute("id", "comp-header");
   pageHeader.textContent = "Completed Tasks";
   mainContentContainer.appendChild(pageHeader);
 }

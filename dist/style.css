@@ -107,12 +107,12 @@ button:hover {
 .task {
   display: flex;
   justify-content: space-between;
-  background-color: lightblue;
+  background-color: var(--darkblue);
+  color: white;
 }
 
 .del-task {
-  background-color: var(--darkblue);
-  color: white;
+  background-color: rgb(134, 150, 254);
 }
 
 .taskBtn {
@@ -127,4 +127,21 @@ button:hover {
 
 .toggle-on {
   background-color: rgb(255, 225, 0);
+}
+
+.incomplete {
+  background-color: salmon;
+  width: 170px;
+  text-align: center;
+}
+
+.complete {
+  background-color: lightgreen;
+  width: 170px;
+  text-align: center;
+}
+
+.task-btns-container {
+  display: flex;
+  gap: 12px;
 }
