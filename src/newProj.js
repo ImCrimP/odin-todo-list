@@ -281,6 +281,31 @@ function createNewProj() {
           }
         });
 
+        compPageComplete.addEventListener("click", () => {
+          if (complete.classList.contains("complete")) {
+            complete.classList.remove("complete");
+            complete.textContent = "Incomplete";
+            cloneComplete.classList.remove("complete");
+            cloneComplete.textContent = "Incomplete";
+            impComplete.classList.remove("complete");
+            impComplete.textContent = "Incomplete";
+            if (compHeader.parentNode.contains(compPageTask)) {
+              compHeader.parentElement.removeChild(compPageTask);
+            }
+          } else {
+            complete.classList.add("complete");
+            complete.textContent = "Complete";
+            cloneComplete.classList.add("complete");
+            cloneComplete.textContent = "Complete";
+            impComplete.classList.add("complete");
+            impComplete.textContent = "Complete";
+
+            compPageComplete.classList.add("complete");
+            compPageComplete.textContent = "Complete";
+            compHeader.parentElement.appendChild(compPageTask);
+          }
+        });
+
         //Important buttons on click
 
         importantBtn.addEventListener("click", () => {
@@ -288,12 +313,16 @@ function createNewProj() {
             importantBtn.classList.remove("toggle-on");
             cloneImportantBtn.classList.remove("toggle-on");
             impHeader.parentNode.removeChild(impTask);
+
+            compPageImportant.classList.remove("toggle-on");
           } else {
             importantBtn.classList.add("toggle-on");
             cloneImportantBtn.classList.add("toggle-on");
 
             impHeader.parentNode.appendChild(impTask);
             impImpBtn.classList.add("toggle-on");
+
+            compPageImportant.classList.add("toggle-on");
           }
         });
 
@@ -302,12 +331,16 @@ function createNewProj() {
             importantBtn.classList.remove("toggle-on");
             cloneImportantBtn.classList.remove("toggle-on");
             impHeader.parentNode.removeChild(impTask);
+
+            compPageImportant.classList.remove("toggle-on");
           } else {
             importantBtn.classList.add("toggle-on");
             cloneImportantBtn.classList.add("toggle-on");
 
             impHeader.parentNode.appendChild(impTask);
             impImpBtn.classList.add("toggle-on");
+
+            compPageImportant.classList.add("toggle-on");
           }
         });
 
@@ -316,12 +349,34 @@ function createNewProj() {
             importantBtn.classList.remove("toggle-on");
             cloneImportantBtn.classList.remove("toggle-on");
             impHeader.parentNode.removeChild(impTask);
+
+            compPageImportant.classList.remove("toggle-on");
           } else {
             importantBtn.classList.add("toggle-on");
             cloneImportantBtn.classList.add("toggle-on");
 
             impHeader.parentNode.appendChild(impTask);
             impImpBtn.classList.add("toggle-on");
+
+            compPageImportant.classList.add("toggle-on");
+          }
+        });
+
+        compPageImportant.addEventListener("click", () => {
+          if (importantBtn.classList.contains("toggle-on")) {
+            importantBtn.classList.remove("toggle-on");
+            cloneImportantBtn.classList.remove("toggle-on");
+            impHeader.parentNode.removeChild(impTask);
+
+            compPageImportant.classList.remove("toggle-on");
+          } else {
+            importantBtn.classList.add("toggle-on");
+            cloneImportantBtn.classList.add("toggle-on");
+
+            impHeader.parentNode.appendChild(impTask);
+            impImpBtn.classList.add("toggle-on");
+
+            compPageImportant.classList.add("toggle-on");
           }
         });
 
@@ -335,6 +390,10 @@ function createNewProj() {
           if (impHeader.parentNode.contains(impTask)) {
             impHeader.parentNode.removeChild(impTask);
           }
+
+          if (compHeader.parentNode.contains(compPageTask)) {
+            compHeader.parentElement.removeChild(compPageTask);
+          }
         });
 
         cloneDelBtn.addEventListener("click", () => {
@@ -345,6 +404,9 @@ function createNewProj() {
           if (impHeader.parentNode.contains(impTask)) {
             impHeader.parentNode.removeChild(impTask);
           }
+          if (compHeader.parentNode.contains(compPageTask)) {
+            compHeader.parentElement.removeChild(compPageTask);
+          }
         });
 
         impDel.addEventListener("click", () => {
@@ -352,6 +414,20 @@ function createNewProj() {
           cloneToAll.removeChild(cloneTaskEditContainer);
           allTasksPageBtn.parentNode.removeChild(cloneToAll);
           impHeader.parentNode.removeChild(impTask);
+
+          if (compHeader.parentNode.contains(compPageTask)) {
+            compHeader.parentElement.removeChild(compPageTask);
+          }
+        });
+
+        compPageDel.addEventListener("click", () => {
+          addTaskBtn.parentNode.removeChild(taskElement);
+          cloneToAll.removeChild(cloneTaskEditContainer);
+          allTasksPageBtn.parentNode.removeChild(cloneToAll);
+          if (impHeader.parentNode.contains(impTask)) {
+            impHeader.parentNode.removeChild(impTask);
+          }
+          compHeader.parentElement.removeChild(compPageTask);
         });
       }
     });
