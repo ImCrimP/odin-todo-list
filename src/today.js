@@ -19,6 +19,7 @@ function todayPage() {
   //create header for all tasks page
   const pageHeader = document.createElement("h1");
   pageHeader.classList.add("page-header");
+  pageHeader.setAttribute("id", "today-header");
   pageHeader.textContent = "Today's Tasks";
   mainContentContainer.appendChild(pageHeader);
 }

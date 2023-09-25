@@ -2,6 +2,15 @@ import createSidebar from "./sidebar";
 import forEachBtn from "./forEach";
 import addTask from "./createTask";
 import importantPage from "./important";
+import {
+  addDays,
+  isBefore,
+  parseISO,
+  isWithinInterval,
+  format,
+  isToday,
+  startOfDay,
+} from "date-fns";
 
 function createNewProj() {
   let projArr = [];
@@ -104,9 +113,21 @@ function createNewProj() {
         const cloneToAll = document.createElement("button");
         cloneToAll.classList.add("task");
 
+        const todayPage = document.querySelector("#today-header");
+        const todayTask = document.createElement("button");
+        todayTask.classList.add("task");
+
+        const weekPage = document.querySelector("#week-header");
+        const weekTask = document.createElement("button");
+        weekTask.classList.add("task");
+
         taskElement.textContent = taskName;
         cloneToAll.textContent = taskName;
 
+        todayTask.textContent = taskName;
+        weekTask.textContent = taskName;
+
+        //creating container for buttons
         const taskEditContainer = document.createElement("div");
         taskEditContainer.classList.add("task-btns-container");
         taskElement.appendChild(taskEditContainer);
@@ -115,6 +136,15 @@ function createNewProj() {
         cloneTaskEditContainer.classList.add("task-btns-container");
         cloneToAll.appendChild(cloneTaskEditContainer);
 
+        const todayTaskContainer = document.createElement("div");
+        todayTaskContainer.classList.add("task-btns-container");
+        todayTask.appendChild(todayTaskContainer);
+
+        const weekTaskContainer = document.createElement("div");
+        weekTaskContainer.classList.add("task-btns-container");
+        weekTask.appendChild(weekTaskContainer);
+
+        //Delete button creation
         const delBtn = document.createElement("button");
         delBtn.classList.add("del-task");
         delBtn.textContent = "Delete";
@@ -123,15 +153,32 @@ function createNewProj() {
         cloneDelBtn.classList.add("del-task");
         cloneDelBtn.textContent = "Delete";
 
+        const todayDelBtn = document.createElement("button");
+        todayDelBtn.classList.add("del-task");
+        todayDelBtn.textContent = "Delete";
+
+        const weekDelBtn = document.createElement("button");
+        weekDelBtn.classList.add("del-task");
+        weekDelBtn.textContent = "Delete";
+
+        //Important button creation
         const importantBtn = document.createElement("button");
         importantBtn.classList.add("important-toggle");
         importantBtn.textContent = "Important";
 
         const cloneImportantBtn = document.createElement("button");
         cloneImportantBtn.classList.add("important-toggle");
-
         cloneImportantBtn.textContent = "Important";
 
+        const todayImportantBtn = document.createElement("button");
+        todayImportantBtn.classList.add("important-toggle");
+        todayImportantBtn.textContent = "Important";
+
+        const weekImportantBtn = document.createElement("button");
+        weekImportantBtn.classList.add("important-toggle");
+        weekImportantBtn.textContent = "Important";
+
+        //Complete button creation
         const complete = document.createElement("button");
         complete.classList.add("incomplete");
         complete.textContent = "Incomplete";
@@ -144,6 +191,43 @@ function createNewProj() {
         impComplete.classList.add("incomplete");
         impComplete.textContent = "Incomplete";
 
+        const todayComplete = document.createElement("button");
+        todayComplete.classList.add("incomplete");
+        todayComplete.textContent = "Incomplete";
+
+        const weekComplete = document.createElement("button");
+        weekComplete.classList.add("incomplete");
+        weekComplete.textContent = "Incomplete";
+
+        //date picker creation
+        const pickDate = document.createElement("input");
+        pickDate.type = "date";
+        pickDate.classList.add("pick-date");
+
+        const clonePickDate = document.createElement("input");
+        clonePickDate.type = "date";
+        clonePickDate.classList.add("pick-date");
+
+        const impPickDate = document.createElement("input");
+        impPickDate.type = "date";
+        impPickDate.classList.add("pick-date");
+
+        const compPickDate = document.createElement("input");
+        compPickDate.type = "date";
+        compPickDate.classList.add("pick-date");
+
+        const todayPickDate = document.createElement("input");
+        todayPickDate.type = "date";
+        todayPickDate.classList.add("pick-date");
+
+        const weekPickDate = document.createElement("input");
+        weekPickDate.type = "date";
+        weekPickDate.classList.add("pick-date");
+
+        //Appending to pages
+        taskEditContainer.appendChild(pickDate);
+        cloneTaskEditContainer.appendChild(clonePickDate);
+
         cloneTaskEditContainer.appendChild(cloneImportantBtn);
         taskEditContainer.appendChild(importantBtn);
 
@@ -152,6 +236,16 @@ function createNewProj() {
 
         cloneTaskEditContainer.appendChild(cloneDelBtn);
         taskEditContainer.appendChild(delBtn);
+
+        todayTaskContainer.appendChild(todayPickDate);
+        todayTaskContainer.appendChild(todayImportantBtn);
+        todayTaskContainer.appendChild(todayComplete);
+        todayTaskContainer.appendChild(todayDelBtn);
+
+        weekTaskContainer.appendChild(weekPickDate);
+        weekTaskContainer.appendChild(weekImportantBtn);
+        weekTaskContainer.appendChild(weekComplete);
+        weekTaskContainer.appendChild(weekDelBtn);
 
         addTaskBtn.parentNode.insertBefore(taskElement, addTaskBtn);
         allTasksPageBtn.parentNode.appendChild(cloneToAll);
@@ -172,6 +266,7 @@ function createNewProj() {
         const impImpBtn = document.createElement("button");
         impImpBtn.classList.add("important-toggle");
         impImpBtn.textContent = "Important";
+        impContainer.appendChild(impPickDate);
         impContainer.appendChild(impImpBtn);
         impContainer.appendChild(impComplete);
         impContainer.appendChild(impDel);
@@ -198,205 +293,357 @@ function createNewProj() {
         const compPageImportant = document.createElement("button");
         compPageImportant.classList.add("important-toggle");
         compPageImportant.textContent = "Important";
+        compPageContainer.appendChild(compPickDate);
         compPageContainer.appendChild(compPageImportant);
         compPageContainer.appendChild(compPageComplete);
         compPageContainer.appendChild(compPageDel);
 
         const compHeader = document.querySelector("#comp-header");
 
+        //Date picker on click
+        pickDate.addEventListener("input", () => {
+          //console.log("you chose " + pickDate.value);
+
+          const pickDateFormatted = parseISO(pickDate.value);
+          //console.log(pickDateFormatted);
+
+          const today = new Date();
+          const startOfToday = startOfDay(today);
+          console.log("today " + today);
+          const dueWithinWeek = addDays(today, 7);
+          //console.log(formatDate(dueWithinWeek));
+          //console.log("week from today " + dueWithinWeek);
+
+          clonePickDate.value = pickDate.value;
+          impPickDate.value = pickDate.value;
+          compPickDate.value = pickDate.value;
+          todayPickDate.value = pickDate.value;
+          weekPickDate.value = pickDate.value;
+
+          if (
+            isWithinInterval(pickDateFormatted, {
+              start: startOfToday,
+              end: dueWithinWeek,
+            })
+          ) {
+            weekPage.parentNode.appendChild(weekTask);
+          } else {
+            if (weekPage.parentNode.contains(weekTask)) {
+              weekPage.parentNode.removeChild(weekTask);
+            }
+          }
+
+          if (isToday(pickDateFormatted)) {
+            todayPage.parentNode.appendChild(todayTask);
+          } else {
+            if (todayPage.parentNode.contains(todayTask)) {
+              todayPage.parentNode.removeChild(todayTask);
+            }
+          }
+        });
+
+        clonePickDate.addEventListener("input", () => {
+          //console.log("you chose " + pickDate.value);
+
+          const pickDateFormatted = parseISO(clonePickDate.value);
+          //console.log(pickDateFormatted);
+
+          const today = new Date();
+          const startOfToday = startOfDay(today);
+          console.log("today " + today);
+          const dueWithinWeek = addDays(today, 7);
+          //console.log(formatDate(dueWithinWeek));
+          //console.log("week from today " + dueWithinWeek);
+
+          pickDate.value = clonePickDate.value;
+          impPickDate.value = clonePickDate.value;
+          compPickDate.value = clonePickDate.value;
+          todayPickDate.value = clonePickDate.value;
+          weekPickDate.value = clonePickDate.value;
+
+          if (
+            isWithinInterval(pickDateFormatted, {
+              start: startOfToday,
+              end: dueWithinWeek,
+            })
+          ) {
+            weekPage.parentNode.appendChild(weekTask);
+          } else {
+            if (weekPage.parentNode.contains(weekTask)) {
+              weekPage.parentNode.removeChild(weekTask);
+            }
+          }
+
+          if (isToday(pickDateFormatted)) {
+            todayPage.parentNode.appendChild(todayTask);
+          } else {
+            if (todayPage.parentNode.contains(todayTask)) {
+              todayPage.parentNode.removeChild(todayTask);
+            }
+          }
+        });
+
+        impPickDate.addEventListener("input", () => {
+          const pickDateFormatted = parseISO(impPickDate.value);
+          //console.log(pickDateFormatted);
+
+          const today = new Date();
+          const startOfToday = startOfDay(today);
+          console.log("today " + today);
+          const dueWithinWeek = addDays(today, 7);
+          //console.log(formatDate(dueWithinWeek));
+          //console.log("week from today " + dueWithinWeek);
+
+          pickDate.value = impPickDate.value;
+          clonePickDate.value = impPickDate.value;
+          compPickDate.value = impPickDate.value;
+          todayPickDate.value = impPickDate.value;
+          weekPickDate.value = impPickDate.value;
+
+          if (
+            isWithinInterval(pickDateFormatted, {
+              start: startOfToday,
+              end: dueWithinWeek,
+            })
+          ) {
+            weekPage.parentNode.appendChild(weekTask);
+          } else {
+            if (weekPage.parentNode.contains(weekTask)) {
+              weekPage.parentNode.removeChild(weekTask);
+            }
+          }
+
+          if (isToday(pickDateFormatted)) {
+            todayPage.parentNode.appendChild(todayTask);
+          } else {
+            if (todayPage.parentNode.contains(todayTask)) {
+              todayPage.parentNode.removeChild(todayTask);
+            }
+          }
+        });
+
+        compPickDate.addEventListener("input", () => {
+          const pickDateFormatted = parseISO(compPickDate.value);
+          //console.log(pickDateFormatted);
+
+          const today = new Date();
+          const startOfToday = startOfDay(today);
+          console.log("today " + today);
+          const dueWithinWeek = addDays(today, 7);
+          //console.log(formatDate(dueWithinWeek));
+          //console.log("week from today " + dueWithinWeek);
+
+          pickDate.value = compPickDate.value;
+          clonePickDate.value = compPickDate.value;
+          impPickDate.value = compPickDate.value;
+          todayPickDate.value = compPickDate.value;
+          weekPickDate.value = compPickDate.value;
+
+          if (
+            isWithinInterval(pickDateFormatted, {
+              start: startOfToday,
+              end: dueWithinWeek,
+            })
+          ) {
+            weekPage.parentNode.appendChild(weekTask);
+          } else {
+            if (weekPage.parentNode.contains(weekTask)) {
+              weekPage.parentNode.removeChild(weekTask);
+            }
+          }
+
+          if (isToday(pickDateFormatted)) {
+            todayPage.parentNode.appendChild(todayTask);
+          } else {
+            if (todayPage.parentNode.contains(todayTask)) {
+              todayPage.parentNode.removeChild(todayTask);
+            }
+          }
+        });
+
+        todayPickDate.addEventListener("input", () => {
+          const pickDateFormatted = parseISO(todayPickDate.value);
+          //console.log(pickDateFormatted);
+
+          const today = new Date();
+          const startOfToday = startOfDay(today);
+          console.log("today " + today);
+          const dueWithinWeek = addDays(today, 7);
+          //console.log(formatDate(dueWithinWeek));
+          //console.log("week from today " + dueWithinWeek);
+
+          pickDate.value = todayPickDate.value;
+          clonePickDate.value = todayPickDate.value;
+          impPickDate.value = todayPickDate.value;
+          compPickDate.value = todayPickDate.value;
+          weekPickDate.value = todayPickDate.value;
+
+          if (
+            isWithinInterval(pickDateFormatted, {
+              start: startOfToday,
+              end: dueWithinWeek,
+            })
+          ) {
+            weekPage.parentNode.appendChild(weekTask);
+          } else {
+            if (weekPage.parentNode.contains(weekTask)) {
+              weekPage.parentNode.removeChild(weekTask);
+            }
+          }
+
+          if (isToday(pickDateFormatted)) {
+            todayPage.parentNode.appendChild(todayTask);
+          } else {
+            if (todayPage.parentNode.contains(todayTask)) {
+              todayPage.parentNode.removeChild(todayTask);
+            }
+          }
+        });
+
+        weekPickDate.addEventListener("input", () => {
+          const pickDateFormatted = parseISO(weekPickDate.value);
+          //console.log(pickDateFormatted);
+
+          const today = new Date();
+          const startOfToday = startOfDay(today);
+          console.log("today " + today);
+          const dueWithinWeek = addDays(today, 7);
+          //console.log(formatDate(dueWithinWeek));
+          //console.log("week from today " + dueWithinWeek);
+
+          pickDate.value = weekPickDate.value;
+          clonePickDate.value = weekPickDate.value;
+          impPickDate.value = weekPickDate.value;
+          compPickDate.value = weekPickDate.value;
+          todayPickDate.value = weekPickDate.value;
+
+          if (
+            isWithinInterval(pickDateFormatted, {
+              start: startOfToday,
+              end: dueWithinWeek,
+            })
+          ) {
+            weekPage.parentNode.appendChild(weekTask);
+          } else {
+            if (weekPage.parentNode.contains(weekTask)) {
+              weekPage.parentNode.removeChild(weekTask);
+            }
+          }
+
+          if (isToday(pickDateFormatted)) {
+            todayPage.parentNode.appendChild(todayTask);
+          } else {
+            if (todayPage.parentNode.contains(todayTask)) {
+              todayPage.parentNode.removeChild(todayTask);
+            }
+          }
+        });
+
         //Complete buttons on click
 
         complete.addEventListener("click", () => {
-          if (complete.classList.contains("complete")) {
-            complete.classList.remove("complete");
-            complete.textContent = "Incomplete";
-            cloneComplete.classList.remove("complete");
-            cloneComplete.textContent = "Incomplete";
-            impComplete.classList.remove("complete");
-            impComplete.textContent = "Incomplete";
-            if (compHeader.parentNode.contains(compPageTask)) {
-              compHeader.parentElement.removeChild(compPageTask);
-            }
-          } else {
-            complete.classList.add("complete");
-            complete.textContent = "Complete";
-            cloneComplete.classList.add("complete");
-            cloneComplete.textContent = "Complete";
-            impComplete.classList.add("complete");
-            impComplete.textContent = "Complete";
-
-            compPageComplete.classList.add("complete");
-            compPageComplete.textContent = "Complete";
-            compHeader.parentElement.appendChild(compPageTask);
-          }
+          completeFunction();
         });
 
         cloneComplete.addEventListener("click", () => {
-          if (complete.classList.contains("complete")) {
-            complete.classList.remove("complete");
-            complete.textContent = "Incomplete";
-            cloneComplete.classList.remove("complete");
-            cloneComplete.textContent = "Incomplete";
-            impComplete.classList.remove("complete");
-            impComplete.textContent = "Incomplete";
-            if (compHeader.parentNode.contains(compPageTask)) {
-              compHeader.parentElement.removeChild(compPageTask);
-            }
-          } else {
-            complete.classList.add("complete");
-            complete.textContent = "Complete";
-            cloneComplete.classList.add("complete");
-            cloneComplete.textContent = "Complete";
-            impComplete.classList.add("complete");
-            impComplete.textContent = "Complete";
-
-            compPageComplete.classList.add("complete");
-            compPageComplete.textContent = "Complete";
-            compHeader.parentElement.appendChild(compPageTask);
-          }
+          completeFunction();
         });
 
         impComplete.addEventListener("click", () => {
-          if (complete.classList.contains("complete")) {
-            complete.classList.remove("complete");
-            complete.textContent = "Incomplete";
-            cloneComplete.classList.remove("complete");
-            cloneComplete.textContent = "Incomplete";
-            impComplete.classList.remove("complete");
-            impComplete.textContent = "Incomplete";
-            if (compHeader.parentNode.contains(compPageTask)) {
-              compHeader.parentElement.removeChild(compPageTask);
-            }
-          } else {
-            complete.classList.add("complete");
-            complete.textContent = "Complete";
-            cloneComplete.classList.add("complete");
-            cloneComplete.textContent = "Complete";
-            impComplete.classList.add("complete");
-            impComplete.textContent = "Complete";
-
-            compPageComplete.classList.add("complete");
-            compPageComplete.textContent = "Complete";
-            compHeader.parentElement.appendChild(compPageTask);
-          }
+          completeFunction();
         });
 
         compPageComplete.addEventListener("click", () => {
-          if (complete.classList.contains("complete")) {
-            complete.classList.remove("complete");
-            complete.textContent = "Incomplete";
-            cloneComplete.classList.remove("complete");
-            cloneComplete.textContent = "Incomplete";
-            impComplete.classList.remove("complete");
-            impComplete.textContent = "Incomplete";
-            if (compHeader.parentNode.contains(compPageTask)) {
-              compHeader.parentElement.removeChild(compPageTask);
-            }
-          } else {
-            complete.classList.add("complete");
-            complete.textContent = "Complete";
-            cloneComplete.classList.add("complete");
-            cloneComplete.textContent = "Complete";
-            impComplete.classList.add("complete");
-            impComplete.textContent = "Complete";
-
-            compPageComplete.classList.add("complete");
-            compPageComplete.textContent = "Complete";
-            compHeader.parentElement.appendChild(compPageTask);
-          }
+          completeFunction();
         });
 
         //Important buttons on click
 
         importantBtn.addEventListener("click", () => {
-          if (importantBtn.classList.contains("toggle-on")) {
-            importantBtn.classList.remove("toggle-on");
-            cloneImportantBtn.classList.remove("toggle-on");
-            impHeader.parentNode.removeChild(impTask);
-
-            compPageImportant.classList.remove("toggle-on");
-          } else {
-            importantBtn.classList.add("toggle-on");
-            cloneImportantBtn.classList.add("toggle-on");
-
-            impHeader.parentNode.appendChild(impTask);
-            impImpBtn.classList.add("toggle-on");
-
-            compPageImportant.classList.add("toggle-on");
-          }
+          importantFunction();
         });
 
         cloneImportantBtn.addEventListener("click", () => {
-          if (importantBtn.classList.contains("toggle-on")) {
-            importantBtn.classList.remove("toggle-on");
-            cloneImportantBtn.classList.remove("toggle-on");
-            impHeader.parentNode.removeChild(impTask);
-
-            compPageImportant.classList.remove("toggle-on");
-          } else {
-            importantBtn.classList.add("toggle-on");
-            cloneImportantBtn.classList.add("toggle-on");
-
-            impHeader.parentNode.appendChild(impTask);
-            impImpBtn.classList.add("toggle-on");
-
-            compPageImportant.classList.add("toggle-on");
-          }
+          importantFunction();
         });
 
         impImpBtn.addEventListener("click", () => {
-          if (importantBtn.classList.contains("toggle-on")) {
-            importantBtn.classList.remove("toggle-on");
-            cloneImportantBtn.classList.remove("toggle-on");
-            impHeader.parentNode.removeChild(impTask);
-
-            compPageImportant.classList.remove("toggle-on");
-          } else {
-            importantBtn.classList.add("toggle-on");
-            cloneImportantBtn.classList.add("toggle-on");
-
-            impHeader.parentNode.appendChild(impTask);
-            impImpBtn.classList.add("toggle-on");
-
-            compPageImportant.classList.add("toggle-on");
-          }
+          importantFunction();
         });
 
         compPageImportant.addEventListener("click", () => {
-          if (importantBtn.classList.contains("toggle-on")) {
-            importantBtn.classList.remove("toggle-on");
-            cloneImportantBtn.classList.remove("toggle-on");
-            impHeader.parentNode.removeChild(impTask);
-
-            compPageImportant.classList.remove("toggle-on");
-          } else {
-            importantBtn.classList.add("toggle-on");
-            cloneImportantBtn.classList.add("toggle-on");
-
-            impHeader.parentNode.appendChild(impTask);
-            impImpBtn.classList.add("toggle-on");
-
-            compPageImportant.classList.add("toggle-on");
-          }
+          importantFunction();
         });
 
         //Delete Buttons on click
 
         delBtn.addEventListener("click", () => {
-          taskElement.removeChild(taskEditContainer);
-          addTaskBtn.parentNode.removeChild(taskElement);
-          cloneToAll.removeChild(cloneTaskEditContainer);
-          allTasksPageBtn.parentNode.removeChild(cloneToAll);
-          if (impHeader.parentNode.contains(impTask)) {
-            impHeader.parentNode.removeChild(impTask);
-          }
-
-          if (compHeader.parentNode.contains(compPageTask)) {
-            compHeader.parentElement.removeChild(compPageTask);
-          }
+          deleteFunction();
         });
 
         cloneDelBtn.addEventListener("click", () => {
+          deleteFunction();
+        });
+
+        impDel.addEventListener("click", () => {
+          deleteFunction();
+        });
+
+        compPageDel.addEventListener("click", () => {
+          deleteFunction();
+        });
+
+        //function for complete buttons
+        function completeFunction() {
+          if (complete.classList.contains("complete")) {
+            complete.classList.remove("complete");
+            complete.textContent = "Incomplete";
+            cloneComplete.classList.remove("complete");
+            cloneComplete.textContent = "Incomplete";
+            impComplete.classList.remove("complete");
+            impComplete.textContent = "Incomplete";
+            if (compHeader.parentNode.contains(compPageTask)) {
+              compHeader.parentElement.removeChild(compPageTask);
+            }
+          } else {
+            complete.classList.add("complete");
+            complete.textContent = "Complete";
+            cloneComplete.classList.add("complete");
+            cloneComplete.textContent = "Complete";
+            impComplete.classList.add("complete");
+            impComplete.textContent = "Complete";
+
+            compPageComplete.classList.add("complete");
+            compPageComplete.textContent = "Complete";
+            compHeader.parentElement.appendChild(compPageTask);
+          }
+        }
+
+        //function for important buttons
+        function importantFunction() {
+          if (importantBtn.classList.contains("toggle-on")) {
+            importantBtn.classList.remove("toggle-on");
+            cloneImportantBtn.classList.remove("toggle-on");
+            impHeader.parentNode.removeChild(impTask);
+
+            compPageImportant.classList.remove("toggle-on");
+            todayImportantBtn.classList.remove("toggle-on");
+            weekImportantBtn.classList.remove("toggle-on");
+          } else {
+            importantBtn.classList.add("toggle-on");
+            cloneImportantBtn.classList.add("toggle-on");
+
+            impHeader.parentNode.appendChild(impTask);
+            impImpBtn.classList.add("toggle-on");
+
+            compPageImportant.classList.add("toggle-on");
+            todayImportantBtn.classList.add("toggle-on");
+            weekImportantBtn.classList.add("toggle-on");
+          }
+        }
+
+        //function for delete buttons
+        function deleteFunction() {
           taskElement.removeChild(taskEditContainer);
           addTaskBtn.parentNode.removeChild(taskElement);
           cloneToAll.removeChild(cloneTaskEditContainer);
@@ -404,31 +651,19 @@ function createNewProj() {
           if (impHeader.parentNode.contains(impTask)) {
             impHeader.parentNode.removeChild(impTask);
           }
-          if (compHeader.parentNode.contains(compPageTask)) {
-            compHeader.parentElement.removeChild(compPageTask);
-          }
-        });
-
-        impDel.addEventListener("click", () => {
-          addTaskBtn.parentNode.removeChild(taskElement);
-          cloneToAll.removeChild(cloneTaskEditContainer);
-          allTasksPageBtn.parentNode.removeChild(cloneToAll);
-          impHeader.parentNode.removeChild(impTask);
 
           if (compHeader.parentNode.contains(compPageTask)) {
             compHeader.parentElement.removeChild(compPageTask);
           }
-        });
 
-        compPageDel.addEventListener("click", () => {
-          addTaskBtn.parentNode.removeChild(taskElement);
-          cloneToAll.removeChild(cloneTaskEditContainer);
-          allTasksPageBtn.parentNode.removeChild(cloneToAll);
-          if (impHeader.parentNode.contains(impTask)) {
-            impHeader.parentNode.removeChild(impTask);
+          if (todayPage.parentNode.contains(todayTask)) {
+            todayPage.parentElement.removeChild(todayTask);
           }
-          compHeader.parentElement.removeChild(compPageTask);
-        });
+
+          if (weekPage.parentNode.contains(weekTask)) {
+            weekPage.parentElement.removeChild(weekTask);
+          }
+        }
       }
     });
   });

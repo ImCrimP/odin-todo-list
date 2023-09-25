@@ -21,6 +21,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "date-fns": "^2.30.0",
     "dompurify": "^3.0.5",
     "lodash": "^4.17.21",
     "util": "^0.12.5"

@@ -21,6 +21,7 @@ function weekPage() {
   //create header for all tasks page
   const pageHeader = document.createElement("h1");
   pageHeader.classList.add("page-header");
+  pageHeader.setAttribute("id", "week-header");
   pageHeader.textContent = "Week's Tasks";
   mainContentContainer.appendChild(pageHeader);
 }
