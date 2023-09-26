@@ -2,6 +2,10 @@ import createSidebar from "./sidebar";
 import forEachBtn from "./forEach";
 import addTask from "./createTask";
 import importantPage from "./important";
+import createTabsFromLocalStorage from "./createFromStorage";
+import loadDataFromLocalStorage from "./loadDataFromStorage";
+import createTask from "./createTask";
+import AllTasksPage from "./allTasks";
 import {
   addDays,
   isBefore,
@@ -13,9 +17,62 @@ import {
 } from "date-fns";
 
 function createNewProj() {
-  let projArr = [];
+  // Function to save projects and tasks to localStorage
 
+  function saveDataToLocalStorage(projArr) {
+    localStorage.setItem("projects", JSON.stringify(projArr));
+    console.log("Data saved", projArr);
+  }
+
+  loadDataFromLocalStorage();
+  // Function to load projects and tasks from localStorage
+  /*
+  function loadDataFromLocalStorage() {
+    const projectsData = localStorage.getItem("projects");
+    if (projectsData) {
+      //console.log(projectsData);
+      const parsedData = JSON.parse(projectsData);
+      console.log("Loaded data from Local Storage:", parsedData);
+      return parsedData;
+    } else {
+      console.log("Local Storage is empty or data is missing.");
+      return [];
+    }
+  }*/
+
+  //window.addEventListener("load", () => {
+
+  createTabsFromLocalStorage();
+  // You can also handle other initialization tasks here if needed.
+  //});
+
+  let projArr = loadDataFromLocalStorage();
+
+  //console.log(projArr);
+  //console.log(projArr.length);
+  // if (projArr.length >= 0) {
   const sidebar = document.querySelector(".sidebar");
+
+  //sidebar.innerHTML = "";
+
+  //projArr.forEach((projectData) => {
+  //  const tabName = projectData.name;
+  //  const tabNameDash = projectsData.tabNameDash;
+
+  // Create a new button for the project
+  //const newTab = document.createElement("button");
+  //newTab.classList.add("sidebar-tab", "new-tab");
+  //newTab.setAttribute("id", `${tabName}-tab`);
+  //newTab.textContent = tabName;
+
+  // Append the button to the sidebar
+  //sidebar.appendChild(newTab);
+
+  if (!Array.isArray(projArr)) {
+    projArr = [];
+  }
+
+  //const sidebar = document.querySelector(".sidebar");
 
   //get new project element
   const newProj = document.querySelector(".new-proj");
@@ -49,7 +106,7 @@ function createNewProj() {
 
   addBtn.addEventListener("click", () => {
     const tabName = projInput.value;
-    console.log(tabName);
+    //console.log(tabName);
 
     let tabNameDash;
 
@@ -61,12 +118,28 @@ function createNewProj() {
 
     tabNameDash = sanitizeForId(tabNameDash);
 
-    console.log(tabNameDash);
+    //console.log(tabNameDash);
 
     if (tabName == "" || tabName.charAt(0) == " ") {
       alert("Enter a valid name");
       return;
     }
+    const projectData = {
+      tabName: tabName,
+      tabNameDash: tabNameDash,
+    };
+
+    projArr.push(projectData);
+    saveDataToLocalStorage(projArr);
+    //console.log(projArr);
+
+    const loadedProjects = loadDataFromLocalStorage(tabNameDash);
+    if (loadedProjects) {
+      console.log("loaded projects data: ", loadedProjects);
+    } else {
+      console.log("Project data ot found in local storage");
+    }
+
     const newTab = document.createElement("button");
     newTab.classList.add("sidebar-tab", "new-tab");
     newTab.setAttribute("id", `${tabNameDash}-tab`);
@@ -89,596 +162,61 @@ function createNewProj() {
     pageHeader.textContent = `${tabName}`;
     mainContentContainer.appendChild(pageHeader);
 
+    const deleteProject = document.createElement("button");
+    deleteProject.classList.add("delete-project");
+    deleteProject.textContent = "Delete Project";
+    pageHeader.appendChild(deleteProject);
+
     sidebar.removeChild(projContainer);
 
     newProj.parentNode.insertBefore(newTab, newProj);
-    addToArray();
-    console.log(projArr);
 
     const addTaskBtn = document.createElement("button");
     const allTasksPageBtn = document.querySelector("#all-page-header");
     addTaskBtn.textContent = "+ Add Task";
     addTaskBtn.setAttribute("id", `${tabNameDash}-add-task`);
     addTaskBtn.classList.add("add-task");
-    mainContentContainer.appendChild(addTaskBtn);
 
-    addTaskBtn.addEventListener("click", () => {
-      // When the "Add Task" button is clicked within a project page,
-      // you can add your logic to create a new task element.
-      const taskName = prompt("Enter task name:");
-      if (taskName) {
-        const allPage = document.querySelector("#all-tab-page");
-        const taskElement = document.createElement("button");
-        taskElement.classList.add("task");
-        const cloneToAll = document.createElement("button");
-        cloneToAll.classList.add("task");
+    const mainPage = document.querySelector(`#${tabNameDash}-tab-page`);
 
-        const todayPage = document.querySelector("#today-header");
-        const todayTask = document.createElement("button");
-        todayTask.classList.add("task");
+    if (!mainPage.contains(addTaskBtn)) {
+      mainPage.appendChild(addTaskBtn);
+    }
 
-        const weekPage = document.querySelector("#week-header");
-        const weekTask = document.createElement("button");
-        weekTask.classList.add("task");
+    createTask(tabNameDash);
 
-        taskElement.textContent = taskName;
-        cloneToAll.textContent = taskName;
+    deleteProject.addEventListener("click", () => {
+      const tabNameDash = projectData.tabNameDash;
 
-        todayTask.textContent = taskName;
-        weekTask.textContent = taskName;
+      localStorage.removeItem(tabNameDash);
 
-        //creating container for buttons
-        const taskEditContainer = document.createElement("div");
-        taskEditContainer.classList.add("task-btns-container");
-        taskElement.appendChild(taskEditContainer);
+      removeProjectFromLocalStorage(tabNameDash);
 
-        const cloneTaskEditContainer = document.createElement("div");
-        cloneTaskEditContainer.classList.add("task-btns-container");
-        cloneToAll.appendChild(cloneTaskEditContainer);
-
-        const todayTaskContainer = document.createElement("div");
-        todayTaskContainer.classList.add("task-btns-container");
-        todayTask.appendChild(todayTaskContainer);
-
-        const weekTaskContainer = document.createElement("div");
-        weekTaskContainer.classList.add("task-btns-container");
-        weekTask.appendChild(weekTaskContainer);
-
-        //Delete button creation
-        const delBtn = document.createElement("button");
-        delBtn.classList.add("del-task");
-        delBtn.textContent = "Delete";
-
-        const cloneDelBtn = document.createElement("button");
-        cloneDelBtn.classList.add("del-task");
-        cloneDelBtn.textContent = "Delete";
-
-        const todayDelBtn = document.createElement("button");
-        todayDelBtn.classList.add("del-task");
-        todayDelBtn.textContent = "Delete";
-
-        const weekDelBtn = document.createElement("button");
-        weekDelBtn.classList.add("del-task");
-        weekDelBtn.textContent = "Delete";
-
-        //Important button creation
-        const importantBtn = document.createElement("button");
-        importantBtn.classList.add("important-toggle");
-        importantBtn.textContent = "Important";
-
-        const cloneImportantBtn = document.createElement("button");
-        cloneImportantBtn.classList.add("important-toggle");
-        cloneImportantBtn.textContent = "Important";
-
-        const todayImportantBtn = document.createElement("button");
-        todayImportantBtn.classList.add("important-toggle");
-        todayImportantBtn.textContent = "Important";
-
-        const weekImportantBtn = document.createElement("button");
-        weekImportantBtn.classList.add("important-toggle");
-        weekImportantBtn.textContent = "Important";
-
-        //Complete button creation
-        const complete = document.createElement("button");
-        complete.classList.add("incomplete");
-        complete.textContent = "Incomplete";
-
-        const cloneComplete = document.createElement("button");
-        cloneComplete.classList.add("incomplete");
-        cloneComplete.textContent = "Incomplete";
-
-        const impComplete = document.createElement("button");
-        impComplete.classList.add("incomplete");
-        impComplete.textContent = "Incomplete";
-
-        const todayComplete = document.createElement("button");
-        todayComplete.classList.add("incomplete");
-        todayComplete.textContent = "Incomplete";
-
-        const weekComplete = document.createElement("button");
-        weekComplete.classList.add("incomplete");
-        weekComplete.textContent = "Incomplete";
-
-        //date picker creation
-        const pickDate = document.createElement("input");
-        pickDate.type = "date";
-        pickDate.classList.add("pick-date");
-
-        const clonePickDate = document.createElement("input");
-        clonePickDate.type = "date";
-        clonePickDate.classList.add("pick-date");
-
-        const impPickDate = document.createElement("input");
-        impPickDate.type = "date";
-        impPickDate.classList.add("pick-date");
-
-        const compPickDate = document.createElement("input");
-        compPickDate.type = "date";
-        compPickDate.classList.add("pick-date");
-
-        const todayPickDate = document.createElement("input");
-        todayPickDate.type = "date";
-        todayPickDate.classList.add("pick-date");
-
-        const weekPickDate = document.createElement("input");
-        weekPickDate.type = "date";
-        weekPickDate.classList.add("pick-date");
-
-        //Appending to pages
-        taskEditContainer.appendChild(pickDate);
-        cloneTaskEditContainer.appendChild(clonePickDate);
-
-        cloneTaskEditContainer.appendChild(cloneImportantBtn);
-        taskEditContainer.appendChild(importantBtn);
-
-        cloneTaskEditContainer.appendChild(cloneComplete);
-        taskEditContainer.appendChild(complete);
-
-        cloneTaskEditContainer.appendChild(cloneDelBtn);
-        taskEditContainer.appendChild(delBtn);
-
-        todayTaskContainer.appendChild(todayPickDate);
-        todayTaskContainer.appendChild(todayImportantBtn);
-        todayTaskContainer.appendChild(todayComplete);
-        todayTaskContainer.appendChild(todayDelBtn);
-
-        weekTaskContainer.appendChild(weekPickDate);
-        weekTaskContainer.appendChild(weekImportantBtn);
-        weekTaskContainer.appendChild(weekComplete);
-        weekTaskContainer.appendChild(weekDelBtn);
-
-        addTaskBtn.parentNode.insertBefore(taskElement, addTaskBtn);
-        allTasksPageBtn.parentNode.appendChild(cloneToAll);
-
-        const impPage = document.querySelector("#importatn-tab-page");
-        const impTask = document.createElement("button");
-        impTask.classList.add("task");
-        impTask.textContent = taskName;
-
-        const impContainer = document.createElement("div");
-        impContainer.classList.add("task-btns-container");
-        impTask.appendChild(impContainer);
-
-        const impDel = document.createElement("button");
-        impDel.classList.add("del-task");
-        impDel.textContent = "Delete";
-
-        const impImpBtn = document.createElement("button");
-        impImpBtn.classList.add("important-toggle");
-        impImpBtn.textContent = "Important";
-        impContainer.appendChild(impPickDate);
-        impContainer.appendChild(impImpBtn);
-        impContainer.appendChild(impComplete);
-        impContainer.appendChild(impDel);
-
-        const impHeader = document.querySelector("#important-header");
-
-        //TODO: create stuff for compelted page (task, buttons, etc.)
-        const compPageTask = document.createElement("button");
-        compPageTask.classList.add("task");
-        compPageTask.textContent = taskName;
-
-        const compPageContainer = document.createElement("div");
-        compPageContainer.classList.add("task-btns-container");
-        compPageTask.appendChild(compPageContainer);
-
-        const compPageDel = document.createElement("button");
-        compPageDel.classList.add("del-task");
-        compPageDel.textContent = "Delete";
-
-        const compPageComplete = document.createElement("button");
-        compPageComplete.classList.add("incomplete");
-        compPageComplete.textContent = "Incomplete";
-
-        const compPageImportant = document.createElement("button");
-        compPageImportant.classList.add("important-toggle");
-        compPageImportant.textContent = "Important";
-        compPageContainer.appendChild(compPickDate);
-        compPageContainer.appendChild(compPageImportant);
-        compPageContainer.appendChild(compPageComplete);
-        compPageContainer.appendChild(compPageDel);
-
-        const compHeader = document.querySelector("#comp-header");
-
-        //Date picker on click
-        pickDate.addEventListener("input", () => {
-          //console.log("you chose " + pickDate.value);
-
-          const pickDateFormatted = parseISO(pickDate.value);
-          //console.log(pickDateFormatted);
-
-          const today = new Date();
-          const startOfToday = startOfDay(today);
-          console.log("today " + today);
-          const dueWithinWeek = addDays(today, 7);
-          //console.log(formatDate(dueWithinWeek));
-          //console.log("week from today " + dueWithinWeek);
-
-          clonePickDate.value = pickDate.value;
-          impPickDate.value = pickDate.value;
-          compPickDate.value = pickDate.value;
-          todayPickDate.value = pickDate.value;
-          weekPickDate.value = pickDate.value;
-
-          if (
-            isWithinInterval(pickDateFormatted, {
-              start: startOfToday,
-              end: dueWithinWeek,
-            })
-          ) {
-            weekPage.parentNode.appendChild(weekTask);
-          } else {
-            if (weekPage.parentNode.contains(weekTask)) {
-              weekPage.parentNode.removeChild(weekTask);
-            }
-          }
-
-          if (isToday(pickDateFormatted)) {
-            todayPage.parentNode.appendChild(todayTask);
-          } else {
-            if (todayPage.parentNode.contains(todayTask)) {
-              todayPage.parentNode.removeChild(todayTask);
-            }
-          }
-        });
-
-        clonePickDate.addEventListener("input", () => {
-          //console.log("you chose " + pickDate.value);
-
-          const pickDateFormatted = parseISO(clonePickDate.value);
-          //console.log(pickDateFormatted);
-
-          const today = new Date();
-          const startOfToday = startOfDay(today);
-          console.log("today " + today);
-          const dueWithinWeek = addDays(today, 7);
-          //console.log(formatDate(dueWithinWeek));
-          //console.log("week from today " + dueWithinWeek);
-
-          pickDate.value = clonePickDate.value;
-          impPickDate.value = clonePickDate.value;
-          compPickDate.value = clonePickDate.value;
-          todayPickDate.value = clonePickDate.value;
-          weekPickDate.value = clonePickDate.value;
-
-          if (
-            isWithinInterval(pickDateFormatted, {
-              start: startOfToday,
-              end: dueWithinWeek,
-            })
-          ) {
-            weekPage.parentNode.appendChild(weekTask);
-          } else {
-            if (weekPage.parentNode.contains(weekTask)) {
-              weekPage.parentNode.removeChild(weekTask);
-            }
-          }
-
-          if (isToday(pickDateFormatted)) {
-            todayPage.parentNode.appendChild(todayTask);
-          } else {
-            if (todayPage.parentNode.contains(todayTask)) {
-              todayPage.parentNode.removeChild(todayTask);
-            }
-          }
-        });
-
-        impPickDate.addEventListener("input", () => {
-          const pickDateFormatted = parseISO(impPickDate.value);
-          //console.log(pickDateFormatted);
-
-          const today = new Date();
-          const startOfToday = startOfDay(today);
-          console.log("today " + today);
-          const dueWithinWeek = addDays(today, 7);
-          //console.log(formatDate(dueWithinWeek));
-          //console.log("week from today " + dueWithinWeek);
-
-          pickDate.value = impPickDate.value;
-          clonePickDate.value = impPickDate.value;
-          compPickDate.value = impPickDate.value;
-          todayPickDate.value = impPickDate.value;
-          weekPickDate.value = impPickDate.value;
-
-          if (
-            isWithinInterval(pickDateFormatted, {
-              start: startOfToday,
-              end: dueWithinWeek,
-            })
-          ) {
-            weekPage.parentNode.appendChild(weekTask);
-          } else {
-            if (weekPage.parentNode.contains(weekTask)) {
-              weekPage.parentNode.removeChild(weekTask);
-            }
-          }
-
-          if (isToday(pickDateFormatted)) {
-            todayPage.parentNode.appendChild(todayTask);
-          } else {
-            if (todayPage.parentNode.contains(todayTask)) {
-              todayPage.parentNode.removeChild(todayTask);
-            }
-          }
-        });
-
-        compPickDate.addEventListener("input", () => {
-          const pickDateFormatted = parseISO(compPickDate.value);
-          //console.log(pickDateFormatted);
-
-          const today = new Date();
-          const startOfToday = startOfDay(today);
-          console.log("today " + today);
-          const dueWithinWeek = addDays(today, 7);
-          //console.log(formatDate(dueWithinWeek));
-          //console.log("week from today " + dueWithinWeek);
-
-          pickDate.value = compPickDate.value;
-          clonePickDate.value = compPickDate.value;
-          impPickDate.value = compPickDate.value;
-          todayPickDate.value = compPickDate.value;
-          weekPickDate.value = compPickDate.value;
-
-          if (
-            isWithinInterval(pickDateFormatted, {
-              start: startOfToday,
-              end: dueWithinWeek,
-            })
-          ) {
-            weekPage.parentNode.appendChild(weekTask);
-          } else {
-            if (weekPage.parentNode.contains(weekTask)) {
-              weekPage.parentNode.removeChild(weekTask);
-            }
-          }
-
-          if (isToday(pickDateFormatted)) {
-            todayPage.parentNode.appendChild(todayTask);
-          } else {
-            if (todayPage.parentNode.contains(todayTask)) {
-              todayPage.parentNode.removeChild(todayTask);
-            }
-          }
-        });
-
-        todayPickDate.addEventListener("input", () => {
-          const pickDateFormatted = parseISO(todayPickDate.value);
-          //console.log(pickDateFormatted);
-
-          const today = new Date();
-          const startOfToday = startOfDay(today);
-          console.log("today " + today);
-          const dueWithinWeek = addDays(today, 7);
-          //console.log(formatDate(dueWithinWeek));
-          //console.log("week from today " + dueWithinWeek);
-
-          pickDate.value = todayPickDate.value;
-          clonePickDate.value = todayPickDate.value;
-          impPickDate.value = todayPickDate.value;
-          compPickDate.value = todayPickDate.value;
-          weekPickDate.value = todayPickDate.value;
-
-          if (
-            isWithinInterval(pickDateFormatted, {
-              start: startOfToday,
-              end: dueWithinWeek,
-            })
-          ) {
-            weekPage.parentNode.appendChild(weekTask);
-          } else {
-            if (weekPage.parentNode.contains(weekTask)) {
-              weekPage.parentNode.removeChild(weekTask);
-            }
-          }
-
-          if (isToday(pickDateFormatted)) {
-            todayPage.parentNode.appendChild(todayTask);
-          } else {
-            if (todayPage.parentNode.contains(todayTask)) {
-              todayPage.parentNode.removeChild(todayTask);
-            }
-          }
-        });
-
-        weekPickDate.addEventListener("input", () => {
-          const pickDateFormatted = parseISO(weekPickDate.value);
-          //console.log(pickDateFormatted);
-
-          const today = new Date();
-          const startOfToday = startOfDay(today);
-          console.log("today " + today);
-          const dueWithinWeek = addDays(today, 7);
-          //console.log(formatDate(dueWithinWeek));
-          //console.log("week from today " + dueWithinWeek);
-
-          pickDate.value = weekPickDate.value;
-          clonePickDate.value = weekPickDate.value;
-          impPickDate.value = weekPickDate.value;
-          compPickDate.value = weekPickDate.value;
-          todayPickDate.value = weekPickDate.value;
-
-          if (
-            isWithinInterval(pickDateFormatted, {
-              start: startOfToday,
-              end: dueWithinWeek,
-            })
-          ) {
-            weekPage.parentNode.appendChild(weekTask);
-          } else {
-            if (weekPage.parentNode.contains(weekTask)) {
-              weekPage.parentNode.removeChild(weekTask);
-            }
-          }
-
-          if (isToday(pickDateFormatted)) {
-            todayPage.parentNode.appendChild(todayTask);
-          } else {
-            if (todayPage.parentNode.contains(todayTask)) {
-              todayPage.parentNode.removeChild(todayTask);
-            }
-          }
-        });
-
-        //Complete buttons on click
-
-        complete.addEventListener("click", () => {
-          completeFunction();
-        });
-
-        cloneComplete.addEventListener("click", () => {
-          completeFunction();
-        });
-
-        impComplete.addEventListener("click", () => {
-          completeFunction();
-        });
-
-        compPageComplete.addEventListener("click", () => {
-          completeFunction();
-        });
-
-        //Important buttons on click
-
-        importantBtn.addEventListener("click", () => {
-          importantFunction();
-        });
-
-        cloneImportantBtn.addEventListener("click", () => {
-          importantFunction();
-        });
-
-        impImpBtn.addEventListener("click", () => {
-          importantFunction();
-        });
-
-        compPageImportant.addEventListener("click", () => {
-          importantFunction();
-        });
-
-        //Delete Buttons on click
-
-        delBtn.addEventListener("click", () => {
-          deleteFunction();
-        });
-
-        cloneDelBtn.addEventListener("click", () => {
-          deleteFunction();
-        });
-
-        impDel.addEventListener("click", () => {
-          deleteFunction();
-        });
-
-        compPageDel.addEventListener("click", () => {
-          deleteFunction();
-        });
-
-        //function for complete buttons
-        function completeFunction() {
-          if (complete.classList.contains("complete")) {
-            complete.classList.remove("complete");
-            complete.textContent = "Incomplete";
-            cloneComplete.classList.remove("complete");
-            cloneComplete.textContent = "Incomplete";
-            impComplete.classList.remove("complete");
-            impComplete.textContent = "Incomplete";
-            if (compHeader.parentNode.contains(compPageTask)) {
-              compHeader.parentElement.removeChild(compPageTask);
-            }
-          } else {
-            complete.classList.add("complete");
-            complete.textContent = "Complete";
-            cloneComplete.classList.add("complete");
-            cloneComplete.textContent = "Complete";
-            impComplete.classList.add("complete");
-            impComplete.textContent = "Complete";
-
-            compPageComplete.classList.add("complete");
-            compPageComplete.textContent = "Complete";
-            compHeader.parentElement.appendChild(compPageTask);
-          }
-        }
-
-        //function for important buttons
-        function importantFunction() {
-          if (importantBtn.classList.contains("toggle-on")) {
-            importantBtn.classList.remove("toggle-on");
-            cloneImportantBtn.classList.remove("toggle-on");
-            impHeader.parentNode.removeChild(impTask);
-
-            compPageImportant.classList.remove("toggle-on");
-            todayImportantBtn.classList.remove("toggle-on");
-            weekImportantBtn.classList.remove("toggle-on");
-          } else {
-            importantBtn.classList.add("toggle-on");
-            cloneImportantBtn.classList.add("toggle-on");
-
-            impHeader.parentNode.appendChild(impTask);
-            impImpBtn.classList.add("toggle-on");
-
-            compPageImportant.classList.add("toggle-on");
-            todayImportantBtn.classList.add("toggle-on");
-            weekImportantBtn.classList.add("toggle-on");
-          }
-        }
-
-        //function for delete buttons
-        function deleteFunction() {
-          taskElement.removeChild(taskEditContainer);
-          addTaskBtn.parentNode.removeChild(taskElement);
-          cloneToAll.removeChild(cloneTaskEditContainer);
-          allTasksPageBtn.parentNode.removeChild(cloneToAll);
-          if (impHeader.parentNode.contains(impTask)) {
-            impHeader.parentNode.removeChild(impTask);
-          }
-
-          if (compHeader.parentNode.contains(compPageTask)) {
-            compHeader.parentElement.removeChild(compPageTask);
-          }
-
-          if (todayPage.parentNode.contains(todayTask)) {
-            todayPage.parentElement.removeChild(todayTask);
-          }
-
-          if (weekPage.parentNode.contains(weekTask)) {
-            weekPage.parentElement.removeChild(weekTask);
-          }
-        }
+      const tabPage = document.querySelector(`#${tabNameDash}-tab-page`);
+      if (tabPage) {
+        tabPage.remove();
       }
+
+      // Remove the project tab from the sidebar
+      newTab.remove();
+
+      // Update projArr to reflect the removal
+      projArr = loadDataFromLocalStorage();
+
+      const allPage = document.querySelector("#all-tab-page");
+      const allTab = document.querySelector("#all-tab");
+      allPage.classList.remove("hide");
+      allTab.classList.add("active");
     });
+
+    function removeProjectFromLocalStorage() {
+      localStorage.removeItem(tabNameDash);
+    }
   });
 
   cancelBtn.addEventListener("click", () => {
     sidebar.removeChild(projContainer);
   });
-
-  function addToArray() {
-    const tabs = document.querySelectorAll(".new-tab");
-
-    tabs.forEach((tab) => {
-      projArr.push(tab);
-    });
-  }
 
   forEachBtn();
 
@@ -697,3 +235,4 @@ function createNewProj() {
 }
 
 export default createNewProj;
+//export { createNewProj, createTabsFromLocalStorage };
