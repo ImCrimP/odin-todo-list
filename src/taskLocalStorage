@@ -1,0 +1,66 @@
+// Function to load tasks from local storage
+function loadTasksFromLocalStorage(tabNameDash) {
+  const tasksKey = `tasks_${tabNameDash}`;
+  const tasksData = localStorage.getItem(tasksKey);
+  if (tasksData) {
+    const parsedTasks = JSON.parse(tasksData);
+    console.log(
+      `Loaded tasks from Local Storage (${tabNameDash}):`,
+      parsedTasks
+    );
+    return parsedTasks;
+  } else {
+    console.log(
+      `Local Storage for tasks (${tabNameDash}) is empty or data is missing.`
+    );
+    return [];
+  }
+}
+
+// Function to save tasks to local storage
+function saveTasksToLocalStorage(tabNameDash, tasks) {
+  const tasksKey = `tasks_${tabNameDash}`;
+  localStorage.setItem(tasksKey, JSON.stringify(tasks));
+  console.log(`Tasks saved for ${tabNameDash}:`, tasks);
+  console.log(tasks);
+}
+
+// Function to add a new task
+function addTask(tabNameDash, newTask) {
+  const tasks = loadTasksFromLocalStorage(tabNameDash);
+  tasks.push(newTask);
+  saveTasksToLocalStorage(tabNameDash, tasks);
+}
+
+// Function to remove a task
+function removeTask(tabNameDash, taskIndex) {
+  const tasks = loadTasksFromLocalStorage(tabNameDash);
+  if (taskIndex >= 0 && taskIndex < tasks.length) {
+    tasks.splice(taskIndex, 1);
+    saveTasksToLocalStorage(tabNameDash, tasks);
+  }
+}
+
+// Function to update an existing task
+function updateTask(tabNameDash, taskIndex, updatedTask) {
+  const tasks = loadTasksFromLocalStorage(tabNameDash);
+  if (taskIndex >= 0 && taskIndex < tasks.length) {
+    tasks[taskIndex] = updatedTask;
+    saveTasksToLocalStorage(tabNameDash, tasks);
+  }
+}
+
+// Function to clear all tasks
+function clearAllTasks(tabNameDash) {
+  localStorage.removeItem(`tasks_${tabNameDash}`);
+  console.log(`All tasks for ${tabNameDash} cleared from Local Storage.`);
+}
+
+export {
+  loadTasksFromLocalStorage,
+  saveTasksToLocalStorage,
+  addTask,
+  removeTask,
+  updateTask,
+  clearAllTasks,
+};

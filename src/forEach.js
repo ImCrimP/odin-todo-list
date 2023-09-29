@@ -1,4 +1,5 @@
 import createNewProj from "./newProj";
+import { loadTasksFromLocalStorage } from "./taskLocalStorage";
 function forEachBtn() {
   document.addEventListener("DOMContentLoaded", function () {
     const btns = document.querySelectorAll(".sidebar-tab");

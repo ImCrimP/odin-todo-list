@@ -1,6 +1,11 @@
 import loadDataFromLocalStorage from "./loadDataFromStorage";
 import createTabsFromLocalStorage from "./createFromStorage";
 import {
+  loadTasksFromLocalStorage,
+  saveTasksToLocalStorage,
+  removeTask,
+} from "./taskLocalStorage";
+import {
   addDays,
   isBefore,
   parseISO,
@@ -9,7 +14,17 @@ import {
   isToday,
   startOfDay,
 } from "date-fns";
+import createTaskFromStorage from "./createTaskFromStorage";
+
 function createTask(tabNameDash) {
+  // Load tasks from local storage for the specified tabNameDash
+  let tasks = loadTasksFromLocalStorage(tabNameDash);
+
+  if (!Array.isArray(tasks)) {
+    tasks = [];
+  }
+  //taskData.dueDate = new Date();
+
   const addTaskBtn = document.querySelector(`#${tabNameDash}-add-task`);
   const allTasksPageBtn = document.querySelector("#all-page-header");
   //addTaskBtn.textContent = "+ Add Task";
@@ -17,11 +32,26 @@ function createTask(tabNameDash) {
   //addTaskBtn.classList.add("add-task");
 
   addTaskBtn.addEventListener("click", () => {
-    console.log("click");
+    //console.log("click");
     // When the "Add Task" button is clicked within a project page,
     // you can add your logic to create a new task element.
     const taskName = prompt("Enter task name:");
     if (taskName) {
+      const taskData = {
+        taskName: taskName,
+        isComplete: false,
+        isImportant: false,
+        dueDate: new Date(),
+      };
+      console.log(
+        "TASK DATA " + taskData.taskName,
+        taskData.isComplete,
+        taskData.isImportant,
+        taskData.dueDate
+      );
+
+      tasks.push(taskData);
+      saveTasksToLocalStorage(tabNameDash, tasks);
       const allPage = document.querySelector("#all-tab-page");
       const taskElement = document.createElement("button");
       taskElement.classList.add("task");
@@ -41,7 +71,9 @@ function createTask(tabNameDash) {
 
       todayTask.textContent = taskName;
       weekTask.textContent = taskName;
-
+      const taskIndex = tasks.findIndex(
+        (task) => task.taskName === taskData.taskName
+      );
       //creating container for buttons
       const taskEditContainer = document.createElement("div");
       taskEditContainer.classList.add("task-btns-container");
@@ -220,6 +252,7 @@ function createTask(tabNameDash) {
           //console.log("you chose " + pickDate.value);
 
           const pickDateFormatted = parseISO(pickDate.value);
+          taskData.dueDate = pickDate.value;
           //console.log(pickDateFormatted);
 
           const today = new Date();
@@ -261,6 +294,7 @@ function createTask(tabNameDash) {
           //console.log("you chose " + pickDate.value);
 
           const pickDateFormatted = parseISO(clonePickDate.value);
+          taskData.dueDate = clonePickDate.value;
           //console.log(pickDateFormatted);
 
           const today = new Date();
@@ -300,6 +334,7 @@ function createTask(tabNameDash) {
 
         impPickDate.addEventListener("input", () => {
           const pickDateFormatted = parseISO(impPickDate.value);
+          taskData.dueDate = impPickDate.value;
           //console.log(pickDateFormatted);
 
           const today = new Date();
@@ -339,6 +374,7 @@ function createTask(tabNameDash) {
 
         compPickDate.addEventListener("input", () => {
           const pickDateFormatted = parseISO(compPickDate.value);
+          taskData.dueDate = compPickDate.value;
           //console.log(pickDateFormatted);
 
           const today = new Date();
@@ -378,6 +414,7 @@ function createTask(tabNameDash) {
 
         todayPickDate.addEventListener("input", () => {
           const pickDateFormatted = parseISO(todayPickDate.value);
+          taskData.dueDate = todayPickDate.value;
           //console.log(pickDateFormatted);
 
           const today = new Date();
@@ -417,7 +454,8 @@ function createTask(tabNameDash) {
 
         weekPickDate.addEventListener("input", () => {
           const pickDateFormatted = parseISO(weekPickDate.value);
-          //console.log(pickDateFormatted);
+          taskData.dueDate = weekPickDate.value;
+          //console.log(pickDateFormatted);jc
 
           const today = new Date();
           const startOfToday = startOfDay(today);
@@ -540,7 +578,7 @@ function createTask(tabNameDash) {
 
       //function for complete buttons
       function completeFunction() {
-        if (complete.classList.contains("complete")) {
+        if (taskData.isComplete) {
           complete.classList.remove("complete");
           complete.textContent = "Incomplete";
           cloneComplete.classList.remove("complete");
@@ -550,6 +588,7 @@ function createTask(tabNameDash) {
           if (compHeader.parentNode.contains(compPageTask)) {
             compHeader.parentElement.removeChild(compPageTask);
           }
+          taskData.isComplete = false;
         } else {
           complete.classList.add("complete");
           complete.textContent = "Complete";
@@ -561,6 +600,7 @@ function createTask(tabNameDash) {
           compPageComplete.classList.add("complete");
           compPageComplete.textContent = "Complete";
           compHeader.parentElement.appendChild(compPageTask);
+          taskData.isComplete = true;
         }
       }
 
@@ -574,6 +614,8 @@ function createTask(tabNameDash) {
           compPageImportant.classList.remove("toggle-on");
           todayImportantBtn.classList.remove("toggle-on");
           weekImportantBtn.classList.remove("toggle-on");
+          taskData.isImportant = false;
+          console.log(taskData.isImportant);
         } else {
           importantBtn.classList.add("toggle-on");
           cloneImportantBtn.classList.add("toggle-on");
@@ -584,31 +626,56 @@ function createTask(tabNameDash) {
           compPageImportant.classList.add("toggle-on");
           todayImportantBtn.classList.add("toggle-on");
           weekImportantBtn.classList.add("toggle-on");
+          taskData.isImportant = true;
+          console.log(taskData.isImportant);
         }
       }
 
       //function for delete buttons
       function deleteFunction() {
-        taskElement.removeChild(taskEditContainer);
-        addTaskBtn.parentNode.removeChild(taskElement);
-        cloneToAll.removeChild(cloneTaskEditContainer);
-        allTasksPageBtn.parentNode.removeChild(cloneToAll);
-        if (impHeader.parentNode.contains(impTask)) {
-          impHeader.parentNode.removeChild(impTask);
-        }
+        console.log("TASK INDEX", taskIndex);
+        console.log("Del button for ", taskName);
+        if (taskIndex !== -1) {
+          // Remove the task object from the array by its index
+          removeTask(tabNameDash, taskIndex);
+          //tasks.pop(taskIndex);
 
-        if (compHeader.parentNode.contains(compPageTask)) {
-          compHeader.parentElement.removeChild(compPageTask);
-        }
+          taskElement.parentNode.removeChild(taskElement);
+          //mainPage.parentNode.removeChild(taskElement);
+          cloneToAll.parentNode.removeChild(cloneToAll);
+          //allTasksPageBtn.parentNode.removeChild(cloneToAll);
+          if (impHeader.parentNode.contains(impTask)) {
+            impHeader.parentNode.removeChild(impTask);
+          }
 
-        if (todayPage.parentNode.contains(todayTask)) {
-          todayPage.parentElement.removeChild(todayTask);
-        }
+          if (compHeader.parentNode.contains(compPageTask)) {
+            compHeader.parentElement.removeChild(compPageTask);
+          }
 
-        if (weekPage.parentNode.contains(weekTask)) {
-          weekPage.parentElement.removeChild(weekTask);
+          if (todayPage.parentNode.contains(todayTask)) {
+            todayPage.parentElement.removeChild(todayTask);
+          }
+
+          if (weekPage.parentNode.contains(weekTask)) {
+            weekPage.parentElement.removeChild(weekTask);
+          }
+
+          // Get the index of the task element in the DOM (you can use data attributes or other identifiers)
+          //const taskIndex = Array.from(tasks).indexOf(taskData);
+
+          //removeTask(tabNameDash, taskIndex);
+
+          console.log("Tasks after removal", tasks);
         }
       }
+
+      //document.addEventListener("DOMContentLoaded", () => {
+      //  console.log("LOADED");
+      //  const tasksData = loadTasksFromLocalStorage(tabNameDash);
+      //  tasksData.forEach((taskData) => {
+      //    createTaskFromStorage();
+      // });
+      // });
     }
   });
 }

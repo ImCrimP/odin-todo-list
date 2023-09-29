@@ -6,6 +6,11 @@ import createTabsFromLocalStorage from "./createFromStorage";
 import loadDataFromLocalStorage from "./loadDataFromStorage";
 import createTask from "./createTask";
 import AllTasksPage from "./allTasks";
+import createTaskFromStorage from "./createTaskFromStorage";
+import {
+  saveTasksToLocalStorage,
+  loadTasksFromLocalStorage,
+} from "./taskLocalStorage";
 import {
   addDays,
   isBefore,
@@ -25,48 +30,14 @@ function createNewProj() {
   }
 
   loadDataFromLocalStorage();
-  // Function to load projects and tasks from localStorage
-  /*
-  function loadDataFromLocalStorage() {
-    const projectsData = localStorage.getItem("projects");
-    if (projectsData) {
-      //console.log(projectsData);
-      const parsedData = JSON.parse(projectsData);
-      console.log("Loaded data from Local Storage:", parsedData);
-      return parsedData;
-    } else {
-      console.log("Local Storage is empty or data is missing.");
-      return [];
-    }
-  }*/
-
-  //window.addEventListener("load", () => {
+  loadTasksFromLocalStorage();
+  createTaskFromStorage();
 
   createTabsFromLocalStorage();
-  // You can also handle other initialization tasks here if needed.
-  //});
 
   let projArr = loadDataFromLocalStorage();
 
-  //console.log(projArr);
-  //console.log(projArr.length);
-  // if (projArr.length >= 0) {
   const sidebar = document.querySelector(".sidebar");
-
-  //sidebar.innerHTML = "";
-
-  //projArr.forEach((projectData) => {
-  //  const tabName = projectData.name;
-  //  const tabNameDash = projectsData.tabNameDash;
-
-  // Create a new button for the project
-  //const newTab = document.createElement("button");
-  //newTab.classList.add("sidebar-tab", "new-tab");
-  //newTab.setAttribute("id", `${tabName}-tab`);
-  //newTab.textContent = tabName;
-
-  // Append the button to the sidebar
-  //sidebar.appendChild(newTab);
 
   if (!Array.isArray(projArr)) {
     projArr = [];
@@ -185,10 +156,12 @@ function createNewProj() {
 
     createTask(tabNameDash);
 
+    //console.log(tasks);
+
     deleteProject.addEventListener("click", () => {
       const tabNameDash = projectData.tabNameDash;
 
-      localStorage.removeItem(tabNameDash);
+      //localStorage.removeItem(tabNameDash);
 
       removeProjectFromLocalStorage(tabNameDash);
 
@@ -207,10 +180,28 @@ function createNewProj() {
       const allTab = document.querySelector("#all-tab");
       allPage.classList.remove("hide");
       allTab.classList.add("active");
+      console.log(projArr);
     });
 
-    function removeProjectFromLocalStorage() {
-      localStorage.removeItem(tabNameDash);
+    //function removeProjectFromLocalStorage() {
+    //  localStorage.removeItem(tabNameDash);
+    //}
+
+    function removeProjectFromLocalStorage(tabNameDash) {
+      const projects = JSON.parse(localStorage.getItem("projects")) || [];
+
+      // Find the index of the project with the specified tabNameDash
+      const index = projects.findIndex(
+        (project) => project.tabNameDash === tabNameDash
+      );
+
+      if (index !== -1) {
+        // Remove the project from the array
+        projects.splice(index, 1);
+
+        // Update local storage with the modified projects array
+        localStorage.setItem("projects", JSON.stringify(projects));
+      }
     }
   });
 

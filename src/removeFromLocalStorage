@@ -1,0 +1,18 @@
+function removeProjectFromLocalStorage(tabNameDash) {
+  const projects = JSON.parse(localStorage.getItem("projects")) || [];
+
+  // Find the index of the project with the specified tabNameDash
+  const index = projects.findIndex(
+    (project) => project.tabNameDash === tabNameDash
+  );
+
+  if (index !== -1) {
+    // Remove the project from the array
+    projects.splice(index, 1);
+
+    // Update local storage with the modified projects array
+    localStorage.setItem("projects", JSON.stringify(projects));
+  }
+}
+
+export default removeProjectFromLocalStorage;
