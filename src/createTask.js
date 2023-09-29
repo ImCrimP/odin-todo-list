@@ -2,6 +2,7 @@ import loadDataFromLocalStorage from "./loadDataFromStorage";
 import createTabsFromLocalStorage from "./createFromStorage";
 import {
   loadTasksFromLocalStorage,
+  updateTask,
   saveTasksToLocalStorage,
   removeTask,
 } from "./taskLocalStorage";
@@ -74,6 +75,7 @@ function createTask(tabNameDash) {
       const taskIndex = tasks.findIndex(
         (task) => task.taskName === taskData.taskName
       );
+
       //creating container for buttons
       const taskEditContainer = document.createElement("div");
       taskEditContainer.classList.add("task-btns-container");
@@ -150,8 +152,6 @@ function createTask(tabNameDash) {
       const pickDate = document.createElement("input");
       pickDate.type = "date";
       pickDate.classList.add("pick-date");
-      pickDate.value = new Date();
-      console.log(pickDate.value);
 
       const clonePickDate = document.createElement("input");
       clonePickDate.type = "date";
@@ -248,6 +248,7 @@ function createTask(tabNameDash) {
       compPageContainer.appendChild(compPageDel);
 
       const compHeader = document.querySelector("#comp-header");
+      updateTask(tabNameDash, taskIndex, taskData.taskName);
       pickDateListeners();
       function pickDateListeners() {
         pickDate.addEventListener("input", () => {
@@ -579,6 +580,7 @@ function createTask(tabNameDash) {
       }
 
       //function for complete buttons
+
       function completeFunction() {
         if (taskData.isComplete) {
           complete.classList.remove("complete");
@@ -604,6 +606,8 @@ function createTask(tabNameDash) {
           compHeader.parentElement.appendChild(compPageTask);
           taskData.isComplete = true;
         }
+        updateTask(tabNameDash, taskIndex, { isComplete: taskData.isComplete });
+        console.log("Is complete update:", taskData.isComplete);
       }
 
       //function for important buttons
@@ -616,8 +620,9 @@ function createTask(tabNameDash) {
           compPageImportant.classList.remove("toggle-on");
           todayImportantBtn.classList.remove("toggle-on");
           weekImportantBtn.classList.remove("toggle-on");
+
           taskData.isImportant = false;
-          console.log(taskData.isImportant);
+          //console.log(taskData.isImportant);
         } else {
           importantBtn.classList.add("toggle-on");
           cloneImportantBtn.classList.add("toggle-on");
@@ -629,8 +634,12 @@ function createTask(tabNameDash) {
           todayImportantBtn.classList.add("toggle-on");
           weekImportantBtn.classList.add("toggle-on");
           taskData.isImportant = true;
-          console.log(taskData.isImportant);
+          //console.log(taskData.isImportant);
         }
+        updateTask(tabNameDash, taskIndex, {
+          isImportant: taskData.isImportant,
+        });
+        console.log("is importatn update:", taskData.isImportant);
       }
 
       //function for delete buttons

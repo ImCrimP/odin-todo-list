@@ -22,7 +22,6 @@ function saveTasksToLocalStorage(tabNameDash, tasks) {
   const tasksKey = `tasks_${tabNameDash}`;
   localStorage.setItem(tasksKey, JSON.stringify(tasks));
   console.log(`Tasks saved for ${tabNameDash}:`, tasks);
-  console.log(tasks.isImportant);
 }
 
 // Function to add a new task
@@ -42,14 +41,17 @@ function removeTask(tabNameDash, taskIndex) {
 }
 
 // Function to update an existing task
-function updateTask(tabNameDash, taskIndex, updatedTask) {
+function updateTask(tabNameDash, taskIndex, updatedProperties) {
   const tasks = loadTasksFromLocalStorage(tabNameDash);
   if (taskIndex >= 0 && taskIndex < tasks.length) {
-    tasks[taskIndex] = updatedTask;
+    // Update the specific properties of the task
+    for (const key in updatedProperties) {
+      if (updatedProperties.hasOwnProperty(key)) {
+        tasks[taskIndex][key] = updatedProperties[key];
+      }
+    }
     saveTasksToLocalStorage(tabNameDash, tasks);
-    console.log("UPDATED TASK", tasks);
-  } else {
-    console.log("error updating");
+    console.log("UPDATED TASK", tasks[taskIndex]);
   }
 }
 

@@ -27,12 +27,12 @@ function createTaskFromStorage() {
       const addTaskBtn = document.querySelector(`#${tabNameDash}-add-task`);
       console.log("LOADED");
       const taskData = loadTasksFromLocalStorage(tabNameDash);
-      console.log("TASK DATA AFTWER LOADED", taskData);
+      console.log("TASK DATA AFTER LOADED", taskData);
 
       taskData.forEach((taskData) => {
         console.log("LOADED AGAIN");
         const taskName = taskData.taskName;
-        console.log(taskName);
+        console.log("TASK NAME:", taskName);
 
         let taskImp = taskData.isImportant;
         let taskComp = taskData.isComplete;
@@ -659,7 +659,9 @@ function createTaskFromStorage() {
             compHeader.parentElement.appendChild(compPageTask);
             taskData.isComplete = true;
           }
-          updateTask(tabNameDash, taskIndex, taskData);
+          updateTask(tabNameDash, taskIndex, {
+            isComplete: taskData.isComplete,
+          });
           console.log("Is complete update:", taskData.isComplete);
         }
 
@@ -689,7 +691,9 @@ function createTaskFromStorage() {
             taskData.isImportant = true;
             //console.log(taskData.isImportant);
           }
-          updateTask(tabNameDash, taskIndex, taskData);
+          updateTask(tabNameDash, taskIndex, {
+            isImportant: taskData.isImportant,
+          });
           console.log("is importatn update:", taskData.isImportant);
         }
 
