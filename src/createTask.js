@@ -271,6 +271,11 @@ function createTask(tabNameDash) {
           todayPickDate.value = pickDate.value;
           weekPickDate.value = pickDate.value;
 
+          taskData.dueDate = pickDate.value;
+
+          updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
+          console.log("UPDATE DUE DATE:", taskData.dueDate);
+
           if (
             isWithinInterval(pickDateFormatted, {
               start: startOfToday,
@@ -313,6 +318,11 @@ function createTask(tabNameDash) {
           todayPickDate.value = clonePickDate.value;
           weekPickDate.value = clonePickDate.value;
 
+          taskData.dueDate = pickDate.value;
+
+          updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
+          console.log("UPDATE DUE DATE:", taskData.dueDate);
+
           if (
             isWithinInterval(pickDateFormatted, {
               start: startOfToday,
@@ -352,6 +362,11 @@ function createTask(tabNameDash) {
           compPickDate.value = impPickDate.value;
           todayPickDate.value = impPickDate.value;
           weekPickDate.value = impPickDate.value;
+
+          taskData.dueDate = pickDate.value;
+
+          updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
+          console.log("UPDATE DUE DATE:", taskData.dueDate);
 
           if (
             isWithinInterval(pickDateFormatted, {
@@ -393,6 +408,11 @@ function createTask(tabNameDash) {
           todayPickDate.value = compPickDate.value;
           weekPickDate.value = compPickDate.value;
 
+          taskData.dueDate = pickDate.value;
+
+          updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
+          console.log("UPDATE DUE DATE:", taskData.dueDate);
+
           if (
             isWithinInterval(pickDateFormatted, {
               start: startOfToday,
@@ -433,6 +453,11 @@ function createTask(tabNameDash) {
           compPickDate.value = todayPickDate.value;
           weekPickDate.value = todayPickDate.value;
 
+          taskData.dueDate = pickDate.value;
+
+          updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
+          console.log("UPDATE DUE DATE:", taskData.dueDate);
+
           if (
             isWithinInterval(pickDateFormatted, {
               start: startOfToday,
@@ -472,6 +497,11 @@ function createTask(tabNameDash) {
           impPickDate.value = weekPickDate.value;
           compPickDate.value = weekPickDate.value;
           todayPickDate.value = weekPickDate.value;
+
+          taskData.dueDate = pickDate.value;
+
+          updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
+          console.log("UPDATE DUE DATE:", taskData.dueDate);
 
           if (
             isWithinInterval(pickDateFormatted, {

@@ -9,6 +9,7 @@ import AllTasksPage from "./allTasks";
 import createTaskFromStorage from "./createTaskFromStorage";
 import {
   saveTasksToLocalStorage,
+  clearAllTasks,
   loadTasksFromLocalStorage,
 } from "./taskLocalStorage";
 import {
@@ -161,26 +162,54 @@ function createNewProj() {
     deleteProject.addEventListener("click", () => {
       const tabNameDash = projectData.tabNameDash;
 
-      //localStorage.removeItem(tabNameDash);
+      const tasks = loadTasksFromLocalStorage(tabNameDash);
 
       removeProjectFromLocalStorage(tabNameDash);
+      clearAllTasks(tabNameDash);
 
       const tabPage = document.querySelector(`#${tabNameDash}-tab-page`);
       if (tabPage) {
         tabPage.remove();
       }
 
-      // Remove the project tab from the sidebar
       newTab.remove();
+      tasks.forEach((taskData) => {
+        const taskElement = document.querySelector(
+          `#${taskData.taskName}-task-all`
+        );
+        const today = document.querySelector(
+          `#${taskData.taskName}-task-today`
+        );
+        const week = document.querySelector(`#${taskData.taskName}-task-week`);
+        const imp = document.querySelector(
+          `#${taskData.taskName}-task-important`
+        );
+        const comp = document.querySelector(
+          `#${taskData.taskName}-task-complete`
+        );
+
+        if (taskElement) {
+          taskElement.remove();
+        }
+        if (today) {
+          today.remove();
+        }
+        if (week) {
+          week.remove();
+        }
+        if (imp) {
+          imp.remove();
+        }
+        if (comp) {
+          comp.remove();
+        }
+      });
 
       // Update projArr to reflect the removal
-      projArr = loadDataFromLocalStorage();
 
-      const allPage = document.querySelector("#all-tab-page");
-      const allTab = document.querySelector("#all-tab");
-      allPage.classList.remove("hide");
-      allTab.classList.add("active");
-      console.log(projArr);
+      let projArr = loadDataFromLocalStorage();
+
+      window.location.reload();
     });
 
     //function removeProjectFromLocalStorage() {

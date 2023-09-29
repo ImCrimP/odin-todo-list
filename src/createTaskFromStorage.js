@@ -209,26 +209,59 @@ function createTaskFromStorage() {
         const pickDate = document.createElement("input");
         pickDate.type = "date";
         pickDate.classList.add("pick-date");
+        pickDate.value = taskData.dueDate;
 
         const clonePickDate = document.createElement("input");
         clonePickDate.type = "date";
         clonePickDate.classList.add("pick-date");
+        clonePickDate.value = taskData.dueDate;
 
         const impPickDate = document.createElement("input");
         impPickDate.type = "date";
         impPickDate.classList.add("pick-date");
+        impPickDate.value = taskData.dueDate;
 
         const compPickDate = document.createElement("input");
         compPickDate.type = "date";
         compPickDate.classList.add("pick-date");
+        compPickDate.value = taskData.dueDate;
 
         const todayPickDate = document.createElement("input");
         todayPickDate.type = "date";
         todayPickDate.classList.add("pick-date");
+        todayPickDate.value = taskData.dueDate;
 
         const weekPickDate = document.createElement("input");
         weekPickDate.type = "date";
         weekPickDate.classList.add("pick-date");
+        weekPickDate.value = taskData.dueDate;
+
+        const pickDateFormatted = parseISO(pickDate.value);
+        const today = new Date();
+        const todayStart = startOfDay(today);
+        console.log("today " + today);
+        const weekAfter = addDays(today, 7);
+
+        if (
+          isWithinInterval(pickDateFormatted, {
+            start: todayStart,
+            end: weekAfter,
+          })
+        ) {
+          weekPage.parentNode.appendChild(weekTask);
+        } else {
+          if (weekPage.parentNode.contains(weekTask)) {
+            weekPage.parentNode.removeChild(weekTask);
+          }
+        }
+
+        if (isToday(pickDateFormatted)) {
+          todayPage.parentNode.appendChild(todayTask);
+        } else {
+          if (todayPage.parentNode.contains(todayTask)) {
+            todayPage.parentNode.removeChild(todayTask);
+          }
+        }
 
         //Appending to pages
         taskEditContainer.appendChild(pickDate);
@@ -303,6 +336,14 @@ function createTaskFromStorage() {
           compHeader.parentNode.appendChild(compPageTask);
         }
 
+        //setting IDs
+        taskElement.setAttribute("id", `${tabNameDash}-task`);
+        cloneToAll.setAttribute("id", `${tabNameDash}-task-all`);
+        todayTask.setAttribute("id", `${tabNameDash}-task-today`);
+        weekTask.setAttribute("id", `${tabNameDash}-task-week`);
+        impTask.setAttribute("id", `${tabNameDash}-task-important`);
+        compPageTask.setAttribute("id", `${tabNameDash}-task-complete`);
+
         pickDateListeners();
         function pickDateListeners() {
           pickDate.addEventListener("input", () => {
@@ -324,6 +365,10 @@ function createTaskFromStorage() {
             compPickDate.value = pickDate.value;
             todayPickDate.value = pickDate.value;
             weekPickDate.value = pickDate.value;
+            taskData.dueDate = pickDate.value;
+
+            updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
+            console.log("UPDATE DUE DATE:", taskData.dueDate);
 
             if (
               isWithinInterval(pickDateFormatted, {
@@ -366,6 +411,10 @@ function createTaskFromStorage() {
             compPickDate.value = clonePickDate.value;
             todayPickDate.value = clonePickDate.value;
             weekPickDate.value = clonePickDate.value;
+            taskData.dueDate = pickDate.value;
+
+            updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
+            console.log("UPDATE DUE DATE:", taskData.dueDate);
 
             if (
               isWithinInterval(pickDateFormatted, {
@@ -406,6 +455,10 @@ function createTaskFromStorage() {
             compPickDate.value = impPickDate.value;
             todayPickDate.value = impPickDate.value;
             weekPickDate.value = impPickDate.value;
+            taskData.dueDate = pickDate.value;
+
+            updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
+            console.log("UPDATE DUE DATE:", taskData.dueDate);
 
             if (
               isWithinInterval(pickDateFormatted, {
@@ -446,6 +499,10 @@ function createTaskFromStorage() {
             impPickDate.value = compPickDate.value;
             todayPickDate.value = compPickDate.value;
             weekPickDate.value = compPickDate.value;
+            taskData.dueDate = pickDate.value;
+
+            updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
+            console.log("UPDATE DUE DATE:", taskData.dueDate);
 
             if (
               isWithinInterval(pickDateFormatted, {
@@ -486,6 +543,10 @@ function createTaskFromStorage() {
             impPickDate.value = todayPickDate.value;
             compPickDate.value = todayPickDate.value;
             weekPickDate.value = todayPickDate.value;
+            taskData.dueDate = pickDate.value;
+
+            updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
+            console.log("UPDATE DUE DATE:", taskData.dueDate);
 
             if (
               isWithinInterval(pickDateFormatted, {
@@ -526,6 +587,10 @@ function createTaskFromStorage() {
             impPickDate.value = weekPickDate.value;
             compPickDate.value = weekPickDate.value;
             todayPickDate.value = weekPickDate.value;
+            taskData.dueDate = pickDate.value;
+
+            updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
+            console.log("UPDATE DUE DATE:", taskData.dueDate);
 
             if (
               isWithinInterval(pickDateFormatted, {

@@ -4,6 +4,10 @@ import removeProjectFromLocalStorage from "./removeFromLocalStorage";
 import { clearAllTasks } from "./taskLocalStorage";
 import { loadTasksFromLocalStorage } from "./taskLocalStorage";
 import createTaskFromStorage from "./createTaskFromStorage";
+import weekPage from "./week";
+import { clone } from "lodash";
+import { saveTasksToLocalStorage } from "./taskLocalStorage";
+import { removeTask } from "./taskLocalStorage";
 
 function createTabsFromLocalStorage() {
   document.addEventListener("DOMContentLoaded", () => {
@@ -69,7 +73,7 @@ function createTabsFromLocalStorage() {
       deleteProject.addEventListener("click", () => {
         const tabNameDash = projectData.tabNameDash;
 
-        //localStorage.removeItem(tabNameDash);
+        const tasks = loadTasksFromLocalStorage(tabNameDash);
 
         removeProjectFromLocalStorage(tabNameDash);
         clearAllTasks(tabNameDash);
@@ -79,17 +83,52 @@ function createTabsFromLocalStorage() {
           tabPage.remove();
         }
 
-        // Remove the project tab from the sidebar
         newTab.remove();
+        tasks.forEach((taskData) => {
+          const taskElement = document.querySelector(
+            `#${taskData.taskName}-task-all`
+          );
+          const today = document.querySelector(
+            `#${taskData.taskName}-task-today`
+          );
+          const week = document.querySelector(
+            `#${taskData.taskName}-task-week`
+          );
+          const imp = document.querySelector(
+            `#${taskData.taskName}-task-important`
+          );
+          const comp = document.querySelector(
+            `#${taskData.taskName}-task-complete`
+          );
+
+          if (taskElement) {
+            taskElement.remove();
+          }
+          if (today) {
+            today.remove();
+          }
+          if (week) {
+            week.remove();
+          }
+          if (imp) {
+            imp.remove();
+          }
+          if (comp) {
+            comp.remove();
+          }
+        });
 
         // Update projArr to reflect the removal
+
         let projArr = loadDataFromLocalStorage();
 
+        /*
         const allPage = document.querySelector("#all-tab-page");
         const allTab = document.querySelector("#all-tab");
         allPage.classList.remove("hide");
         allTab.classList.add("active");
-        console.log(projArr);
+        console.log("projects", projArr);*/
+        window.location.reload();
       });
       ///////////////////////////
 
