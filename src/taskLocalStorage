@@ -22,7 +22,7 @@ function saveTasksToLocalStorage(tabNameDash, tasks) {
   const tasksKey = `tasks_${tabNameDash}`;
   localStorage.setItem(tasksKey, JSON.stringify(tasks));
   console.log(`Tasks saved for ${tabNameDash}:`, tasks);
-  console.log(tasks);
+  console.log(tasks.isImportant);
 }
 
 // Function to add a new task
@@ -47,6 +47,9 @@ function updateTask(tabNameDash, taskIndex, updatedTask) {
   if (taskIndex >= 0 && taskIndex < tasks.length) {
     tasks[taskIndex] = updatedTask;
     saveTasksToLocalStorage(tabNameDash, tasks);
+    console.log("UPDATED TASK", tasks);
+  } else {
+    console.log("error updating");
   }
 }
 
