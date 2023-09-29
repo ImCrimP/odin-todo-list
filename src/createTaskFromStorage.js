@@ -148,26 +148,62 @@ function createTaskFromStorage() {
         //Complete button creation
         const complete = document.createElement("button");
         complete.classList.add("incomplete");
-        complete.textContent = "Incomplete";
-        if (taskData.isImportant) {
-          cloneImportantBtn.classList.add("toggle-on");
+
+        if (taskData.isComplete) {
+          complete.classList.add("complete");
+          complete.textContent = "Complete";
+        } else {
+          complete.textContent = "Incomplete";
         }
 
         const cloneComplete = document.createElement("button");
         cloneComplete.classList.add("incomplete");
         cloneComplete.textContent = "Incomplete";
+        if (taskData.isComplete) {
+          cloneComplete.classList.add("complete");
+          cloneComplete.textContent = "Complete";
+        } else {
+          cloneComplete.textContent = "Incomplete";
+        }
 
         const impComplete = document.createElement("button");
         impComplete.classList.add("incomplete");
         impComplete.textContent = "Incomplete";
+        if (taskData.isComplete) {
+          impComplete.classList.add("complete");
+          impComplete.textContent = "Complete";
+        } else {
+          impComplete.textContent = "Incomplete";
+        }
 
         const todayComplete = document.createElement("button");
         todayComplete.classList.add("incomplete");
         todayComplete.textContent = "Incomplete";
+        if (taskData.isComplete) {
+          todayComplete.classList.add("complete");
+          todayComplete.textContent = "Complete";
+        } else {
+          todayComplete.textContent = "Incomplete";
+        }
 
         const weekComplete = document.createElement("button");
         weekComplete.classList.add("incomplete");
         weekComplete.textContent = "Incomplete";
+        if (taskData.isComplete) {
+          weekComplete.classList.add("complete");
+          weekComplete.textContent = "Complete";
+        } else {
+          weekComplete.textContent = "Incomplete";
+        }
+
+        const compPageComplete = document.createElement("button");
+        compPageComplete.classList.add("incomplete");
+        if (taskData.isComplete) {
+          compPageComplete.classList.add("complete");
+          compPageComplete.textContent = "Complete";
+        } else {
+          compPageComplete.textContent = "Incomplete";
+        }
 
         //date picker creation
         const pickDate = document.createElement("input");
@@ -254,10 +290,6 @@ function createTaskFromStorage() {
         compPageDel.classList.add("del-task");
         compPageDel.textContent = "Delete";
 
-        const compPageComplete = document.createElement("button");
-        compPageComplete.classList.add("incomplete");
-        compPageComplete.textContent = "Incomplete";
-
         compPageContainer.appendChild(compPickDate);
         compPageContainer.appendChild(compPageImportant);
         compPageContainer.appendChild(compPageComplete);
@@ -266,12 +298,11 @@ function createTaskFromStorage() {
         if (importantBtn.classList.contains("toggle-on")) {
           impHeader.parentNode.appendChild(impTask);
         }
-
-        if (complete.classList.contains("complete")) {
-          compPageComplete.parentNode.appendChild("complete");
+        const compHeader = document.querySelector("#comp-header");
+        if (compPageComplete.classList.contains("complete")) {
+          compHeader.parentNode.appendChild(compPageTask);
         }
 
-        const compHeader = document.querySelector("#comp-header");
         pickDateListeners();
         function pickDateListeners() {
           pickDate.addEventListener("input", () => {
@@ -642,9 +673,9 @@ function createTaskFromStorage() {
             compPageImportant.classList.remove("toggle-on");
             todayImportantBtn.classList.remove("toggle-on");
             weekImportantBtn.classList.remove("toggle-on");
-            console.log(taskData.isImportant);
+
             taskData.isImportant = false;
-            console.log(taskData.isImportant);
+            //console.log(taskData.isImportant);
           } else {
             importantBtn.classList.add("toggle-on");
             cloneImportantBtn.classList.add("toggle-on");
@@ -656,10 +687,10 @@ function createTaskFromStorage() {
             todayImportantBtn.classList.add("toggle-on");
             weekImportantBtn.classList.add("toggle-on");
             taskData.isImportant = true;
-            console.log(taskData.isImportant);
+            //console.log(taskData.isImportant);
           }
           updateTask(tabNameDash, taskIndex, taskData);
-          console.log(taskData.isImportant);
+          console.log("is importatn update:", taskData.isImportant);
         }
 
         //function for delete buttons

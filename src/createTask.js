@@ -150,6 +150,8 @@ function createTask(tabNameDash) {
       const pickDate = document.createElement("input");
       pickDate.type = "date";
       pickDate.classList.add("pick-date");
+      pickDate.value = new Date();
+      console.log(pickDate.value);
 
       const clonePickDate = document.createElement("input");
       clonePickDate.type = "date";
