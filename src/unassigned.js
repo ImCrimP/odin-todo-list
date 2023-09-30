@@ -1,15 +1,87 @@
 import AllTasksPage from "./allTasks";
 import importantPage from "./important";
 import createSidebar from "./sidebar";
+import loadDataFromLocalStorage from "./loadDataFromStorage";
+import createTaskFromStorage from "./createFromStorage";
+import createTask from "./createTask";
+import {
+  loadTasksFromLocalStorage,
+  saveDataToLocalStorage,
+} from "./taskLocalStorage";
+import createTabsFromLocalStorage from "./createFromStorage";
+import { updateTask } from "./taskLocalStorage";
 
 function unassignedPage() {
+  let projArr = loadDataFromLocalStorage();
+
+  const existingUnassignedTab = document.querySelector("#Unassigned-tab-page");
+  const unassignedExists = projArr.some(
+    (project) => project.tabName === "Unassigned"
+  );
+  if (!existingUnassignedTab || !unassignedExists) {
+    // If "Unassigned" tab doesn't exist, add it to projArr
+    const unassignedProjectData = {
+      tabName: "Unassigned",
+      tabNameDash: "Unassigned",
+    };
+    //create header for all tasks page
+    const mainContentContainer = document.createElement("div");
+    mainContentContainer.setAttribute("id", `Unassigned-tab-page`);
+    mainContentContainer.classList.add(
+      "main-content-container",
+      "show-hide",
+      "hide"
+    );
+    const pageHeader = document.createElement("h1");
+    pageHeader.classList.add("page-header");
+    pageHeader.textContent = `Unassigned`;
+    mainContentContainer.appendChild(pageHeader);
+    projArr.push(unassignedProjectData);
+    saveDataToLocalStorage(projArr);
+    loadTasksFromLocalStorage();
+    //window.location.reload();
+  }
   //create sidebar
   //createSidebar();
+  //loadDataFromLocalStorage();
+  loadTasksFromLocalStorage();
+  //createTaskFromStorage();
+
+  //createTabsFromLocalStorage();
+
+  if (!Array.isArray(projArr)) {
+    projArr = [];
+  }
+
+  const projectData = {
+    tabName: "Unassigned",
+    tabNameDash: "Unassigned",
+  };
+
+  //projArr.push(projectData);
+
+  const tabExists = projArr.some((project) => project.tabName === "Unassigned");
+
+  // if (!tabExists) {
+  //  // Only save the data if the "Unassigned" tab doesn't exist
+  // saveDataToLocalStorage(projArr);
+  //}
+
+  //projectData.tabNameDash = "unassigned";
+
+  //projArr.push(projectData);
+  //if (projArr.length != 1) {
+  //saveDataToLocalStorage(projArr);
+  // }
+  /*
+
+  console.log("unassigned projArr data", projectData);
 
   //add main content container so that is is to the right of sidebar
+
   const bodyContainer = document.querySelector("#body-container");
   const mainContentContainer = document.createElement("div");
-  mainContentContainer.setAttribute("id", "unassigned-tab-page");
+  mainContentContainer.setAttribute("id", "Unassigned-tab-page");
   mainContentContainer.classList.add(
     "main-content-container",
     "show-hide",
@@ -28,17 +100,19 @@ function unassignedPage() {
 
   const addTask = document.createElement("button");
   addTask.classList.add("add-task");
-  addTask.setAttribute("id", "unassigned-tasks-add-btn");
+  addTask.setAttribute("id", "Unassigned-tasks-add-btn");
   addTask.textContent = "+ Add Task";
+  addTask.setAttribute("id", "Unassigned-add-task");
   mainContentContainer.appendChild(addTask);
-
+*/
   // Check if the event listener is already attached before adding it
 
   if (!addTask.hasEventListener) {
     addTask.hasEventListener = true;
 
-    addTask.addEventListener("click", () => {
-      const taskName = prompt("Enter task name:");
+    //addTask.addEventListener("click", () => {
+    createTask(projectData.tabNameDash);
+    /*  const taskName = prompt("Enter task name:");
       if (taskName) {
         const taskElement = document.createElement("button");
         taskElement.classList.add("task");
@@ -370,8 +444,8 @@ function unassignedPage() {
           }
           compHeader.parentElement.removeChild(compPageTask);
         });
-      }
-    });
+      }*/
+    //});
   }
 }
 

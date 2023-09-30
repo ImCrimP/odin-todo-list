@@ -6,6 +6,8 @@ import unassignedPage from "./unassigned";
 import completedPage from "./completed";
 import createNewProj from "./newProj";
 import forEachBtn from "./forEach";
+import { saveDataToLocalStorage } from "./taskLocalStorage";
+import loadDataFromLocalStorage from "./loadDataFromStorage";
 //import { ContextExclusionPlugin } from "webpack";
 let projArr = [];
 
@@ -84,7 +86,52 @@ function createSidebar() {
   unassigned.classList.add("sidebar-tab", "page-tab");
   unassigned.setAttribute("id", "unassigned-tab");
   unassigned.textContent = "Unassigned";
-  sidebar.appendChild(unassigned);
+  //sidebar.appendChild(unassigned);
+  // Check if the "Unassigned" tab already exists
+
+  /*
+  const existingUnassignedTab = document.querySelector("#Unassigned-tab-page");
+
+  if (!existingUnassignedTab) {
+    // "Unassigned" tab doesn't exist, so create it
+    const unassigned = document.createElement("button");
+    unassigned.classList.add("sidebar-tab", "page-tab");
+    unassigned.setAttribute("id", "Unassigned-tab");
+    unassigned.textContent = "Unassigned";
+    sidebar.appendChild(unassigned);
+
+    // Create the main content container for the "Unassigned" tab
+    const bodyContainer = document.querySelector("#body-container");
+    const mainContentContainer = document.createElement("div");
+    mainContentContainer.setAttribute("id", "Unassigned-tab-page");
+    mainContentContainer.classList.add(
+      "main-content-container",
+      "show-hide",
+      "hide"
+    );
+    const showHideContainer = document.createElement("div");
+    showHideContainer.classList.add("show-hide");
+    mainContentContainer.appendChild(showHideContainer);
+    bodyContainer.appendChild(mainContentContainer);
+
+    // Load and update projArr
+    let projArr = loadDataFromLocalStorage();
+
+    if (!Array.isArray(projArr)) {
+      projArr = [];
+    }
+
+    const projectData = {
+      tabName: "Unassigned",
+      tabNameDash: "Unassigned",
+    };
+
+    // Save the updated projArr to localStorage
+    saveDataToLocalStorage(projArr);
+
+    // Push the "Unassigned" project data to projArr
+    projArr.push(projectData);
+  }*/
 
   //5.
   const newProj = document.createElement("button");

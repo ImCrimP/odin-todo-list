@@ -13,6 +13,10 @@ function createTaskFromStorage() {
   document.addEventListener("DOMContentLoaded", () => {
     const projectsData = loadDataFromLocalStorage();
     // Parse the data here
+    //if (!Array.isArray(projectsData)) {
+    //  console.error("Error: projectsData is not an array or is undefined.");
+    //  return;
+    //}
 
     //console.log(projectsData);
     projectsData.forEach((projectData) => {

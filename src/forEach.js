@@ -9,7 +9,9 @@ function forEachBtn() {
 
     btns.forEach((button) => {
       button.addEventListener("click", () => {
+        console.log("active click ", button);
         const pageId = `${button.id}-page`;
+        console.log(pageId);
         const page = document.querySelector(`#${pageId}`);
 
         if (!page) {
@@ -23,6 +25,7 @@ function forEachBtn() {
 
         // Show the selected page and mark the button as active
         button.classList.add("active");
+        console.log("active click ", button);
       });
     });
 
@@ -30,6 +33,7 @@ function forEachBtn() {
 
     pageTabs.forEach((button) => {
       button.addEventListener("click", () => {
+        console.log("clicked", button);
         const pageId = `${button.id}-page`;
         const page = document.querySelector(`#${pageId}`);
 

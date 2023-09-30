@@ -11,7 +11,12 @@ import { removeTask } from "./taskLocalStorage";
 
 function createTabsFromLocalStorage() {
   document.addEventListener("DOMContentLoaded", () => {
-    const projectsData = loadDataFromLocalStorage(); // Parse the data here
+    let projectsData = loadDataFromLocalStorage(); // Parse the data here
+
+    if (!Array.isArray(projectsData)) {
+      // Handle the case where projectsData is not an array (e.g., set it to an empty array)
+      projectsData = [];
+    }
 
     //console.log(projectsData);
     projectsData.forEach((projectData) => {
@@ -58,78 +63,80 @@ function createTabsFromLocalStorage() {
 
       const mainPage = document.querySelector(`#${tabNameDash}-tab-page`);
 
-      const deleteProject = document.createElement("button");
-      deleteProject.classList.add("delete-project");
-      deleteProject.textContent = "Delete Project";
-      pageHeader.appendChild(deleteProject);
-      const sidebar = document.querySelector(".sidebar");
+      if (projectData.tabNameDash != "Unassigned") {
+        const deleteProject = document.createElement("button");
+        deleteProject.classList.add("delete-project");
+        deleteProject.textContent = "Delete Project";
+        pageHeader.appendChild(deleteProject);
+        const sidebar = document.querySelector(".sidebar");
 
-      newProj.parentNode.insertBefore(newTab, newProj);
+        newProj.parentNode.insertBefore(newTab, newProj);
+        deleteProject.addEventListener("click", () => {
+          const tabNameDash = projectData.tabNameDash;
+
+          const tasks = loadTasksFromLocalStorage(tabNameDash);
+
+          removeProjectFromLocalStorage(tabNameDash);
+          clearAllTasks(tabNameDash);
+
+          const tabPage = document.querySelector(`#${tabNameDash}-tab-page`);
+          if (tabPage) {
+            tabPage.remove();
+          }
+
+          newTab.remove();
+          tasks.forEach((taskData) => {
+            const taskElement = document.querySelector(
+              `#${taskData.taskName}-task-all`
+            );
+            const today = document.querySelector(
+              `#${taskData.taskName}-task-today`
+            );
+            const week = document.querySelector(
+              `#${taskData.taskName}-task-week`
+            );
+            const imp = document.querySelector(
+              `#${taskData.taskName}-task-important`
+            );
+            const comp = document.querySelector(
+              `#${taskData.taskName}-task-complete`
+            );
+
+            if (taskElement) {
+              taskElement.remove();
+            }
+            if (today) {
+              today.remove();
+            }
+            if (week) {
+              week.remove();
+            }
+            if (imp) {
+              imp.remove();
+            }
+            if (comp) {
+              comp.remove();
+            }
+          });
+
+          // Update projArr to reflect the removal
+
+          loadDataFromLocalStorage();
+
+          /*
+          const allPage = document.querySelector("#all-tab-page");
+          const allTab = document.querySelector("#all-tab");
+          allPage.classList.remove("hide");
+          allTab.classList.add("active");
+          console.log("projects", projArr);*/
+          window.location.reload();
+        });
+      }
 
       if (!mainPage.contains(addTaskBtn)) {
         mainPage.appendChild(addTaskBtn);
       }
 
-      deleteProject.addEventListener("click", () => {
-        const tabNameDash = projectData.tabNameDash;
-
-        const tasks = loadTasksFromLocalStorage(tabNameDash);
-
-        removeProjectFromLocalStorage(tabNameDash);
-        clearAllTasks(tabNameDash);
-
-        const tabPage = document.querySelector(`#${tabNameDash}-tab-page`);
-        if (tabPage) {
-          tabPage.remove();
-        }
-
-        newTab.remove();
-        tasks.forEach((taskData) => {
-          const taskElement = document.querySelector(
-            `#${taskData.taskName}-task-all`
-          );
-          const today = document.querySelector(
-            `#${taskData.taskName}-task-today`
-          );
-          const week = document.querySelector(
-            `#${taskData.taskName}-task-week`
-          );
-          const imp = document.querySelector(
-            `#${taskData.taskName}-task-important`
-          );
-          const comp = document.querySelector(
-            `#${taskData.taskName}-task-complete`
-          );
-
-          if (taskElement) {
-            taskElement.remove();
-          }
-          if (today) {
-            today.remove();
-          }
-          if (week) {
-            week.remove();
-          }
-          if (imp) {
-            imp.remove();
-          }
-          if (comp) {
-            comp.remove();
-          }
-        });
-
-        // Update projArr to reflect the removal
-
-        let projArr = loadDataFromLocalStorage();
-
-        /*
-        const allPage = document.querySelector("#all-tab-page");
-        const allTab = document.querySelector("#all-tab");
-        allPage.classList.remove("hide");
-        allTab.classList.add("active");
-        console.log("projects", projArr);*/
-        window.location.reload();
-      });
       ///////////////////////////
 
       // ... (add any other content you need for the tab here)

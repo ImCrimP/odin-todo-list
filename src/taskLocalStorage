@@ -61,7 +61,13 @@ function clearAllTasks(tabNameDash) {
   console.log(`All tasks for ${tabNameDash} cleared from Local Storage.`);
 }
 
+function saveDataToLocalStorage(projArr) {
+  localStorage.setItem("projects", JSON.stringify(projArr));
+  console.log("Data saved", projArr);
+}
+
 export {
+  saveDataToLocalStorage,
   loadTasksFromLocalStorage,
   saveTasksToLocalStorage,
   addTask,

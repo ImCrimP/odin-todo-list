@@ -44,6 +44,33 @@ function createNewProj() {
     projArr = [];
   }
 
+  // Check if "Unassigned" tab exists in projArr
+  const unassignedExists = projArr.some(
+    (project) => project.tabName === "Unassigned"
+  );
+
+  if (!unassignedExists) {
+    // If "Unassigned" tab doesn't exist, add it to projArr
+    const unassignedProjectData = {
+      tabName: "Unassigned",
+      tabNameDash: "Unassigned",
+    };
+    //create header for all tasks page
+    const mainContentContainer = document.createElement("div");
+    mainContentContainer.setAttribute("id", `Unassigned-tab-page`);
+    mainContentContainer.classList.add(
+      "main-content-container",
+      "show-hide",
+      "hide"
+    );
+    const pageHeader = document.createElement("h1");
+    pageHeader.classList.add("page-header");
+    pageHeader.textContent = `Unassigned`;
+    mainContentContainer.appendChild(pageHeader);
+    projArr.push(unassignedProjectData);
+    saveDataToLocalStorage(projArr);
+  }
+
   //const sidebar = document.querySelector(".sidebar");
 
   //get new project element
