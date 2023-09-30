@@ -1,26 +1,9 @@
-import createSidebar from "./sidebar";
 import forEachBtn from "./forEach";
-import addTask from "./createTask";
-import importantPage from "./important";
 import createTabsFromLocalStorage from "./createFromStorage";
 import loadDataFromLocalStorage from "./loadDataFromStorage";
 import createTask from "./createTask";
-import AllTasksPage from "./allTasks";
 import createTaskFromStorage from "./createTaskFromStorage";
-import {
-  saveTasksToLocalStorage,
-  clearAllTasks,
-  loadTasksFromLocalStorage,
-} from "./taskLocalStorage";
-import {
-  addDays,
-  isBefore,
-  parseISO,
-  isWithinInterval,
-  format,
-  isToday,
-  startOfDay,
-} from "date-fns";
+import { clearAllTasks, loadTasksFromLocalStorage } from "./taskLocalStorage";
 
 function createNewProj() {
   // Function to save projects and tasks to localStorage
@@ -48,30 +31,6 @@ function createNewProj() {
   const unassignedExists = projArr.some(
     (project) => project.tabName === "Unassigned"
   );
-
-  if (!unassignedExists) {
-    // If "Unassigned" tab doesn't exist, add it to projArr
-    const unassignedProjectData = {
-      tabName: "Unassigned",
-      tabNameDash: "Unassigned",
-    };
-    //create header for all tasks page
-    const mainContentContainer = document.createElement("div");
-    mainContentContainer.setAttribute("id", `Unassigned-tab-page`);
-    mainContentContainer.classList.add(
-      "main-content-container",
-      "show-hide",
-      "hide"
-    );
-    const pageHeader = document.createElement("h1");
-    pageHeader.classList.add("page-header");
-    pageHeader.textContent = `Unassigned`;
-    mainContentContainer.appendChild(pageHeader);
-    projArr.push(unassignedProjectData);
-    saveDataToLocalStorage(projArr);
-  }
-
-  //const sidebar = document.querySelector(".sidebar");
 
   //get new project element
   const newProj = document.querySelector(".new-proj");
@@ -101,11 +60,8 @@ function createNewProj() {
 
   const projInput = projContainer.querySelector(".proj-name");
 
-  //let projInstance = new Project();
-
   addBtn.addEventListener("click", () => {
     const tabName = projInput.value;
-    //console.log(tabName);
 
     let tabNameDash;
 
@@ -116,8 +72,6 @@ function createNewProj() {
     }
 
     tabNameDash = sanitizeForId(tabNameDash);
-
-    //console.log(tabNameDash);
 
     if (tabName == "" || tabName.charAt(0) == " ") {
       alert("Enter a valid name");
@@ -130,7 +84,6 @@ function createNewProj() {
 
     projArr.push(projectData);
     saveDataToLocalStorage(projArr);
-    //console.log(projArr);
 
     const loadedProjects = loadDataFromLocalStorage(tabNameDash);
     if (loadedProjects) {
@@ -183,8 +136,6 @@ function createNewProj() {
     }
 
     createTask(tabNameDash);
-
-    //console.log(tasks);
 
     deleteProject.addEventListener("click", () => {
       const tabNameDash = projectData.tabNameDash;
@@ -239,10 +190,6 @@ function createNewProj() {
       window.location.reload();
     });
 
-    //function removeProjectFromLocalStorage() {
-    //  localStorage.removeItem(tabNameDash);
-    //}
-
     function removeProjectFromLocalStorage(tabNameDash) {
       const projects = JSON.parse(localStorage.getItem("projects")) || [];
 
@@ -282,4 +229,3 @@ function createNewProj() {
 }
 
 export default createNewProj;
-//export { createNewProj, createTabsFromLocalStorage };

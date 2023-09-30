@@ -1,5 +1,3 @@
-import createSidebar from "./sidebar";
-
 function completedPage() {
   //add main content container so that is is to the right of sidebar
   const bodyContainer = document.querySelector("#body-container");

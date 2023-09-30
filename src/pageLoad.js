@@ -3,19 +3,13 @@ import createSidebar from "./sidebar";
 import completedPage from "./completed";
 import todayPage from "./today";
 import weekPage from "./week";
-import unassignedPage from "./unassigned";
 import loadDataFromLocalStorage from "./loadDataFromStorage";
-import {
-  saveDataToLocalStorage,
-  loadTasksFromLocalStorage,
-} from "./taskLocalStorage";
+import { saveDataToLocalStorage } from "./taskLocalStorage";
 import importantPage from "./important";
 import createTabsFromLocalStorage from "./createFromStorage";
 import createTaskFromStorage from "./createTaskFromStorage";
 
 function intialLoad() {
-  //localStorage.clear();
-
   let projArr = loadDataFromLocalStorage();
 
   const existingUnassignedTab = document.querySelector("#Unassigned-tab-page");
@@ -42,20 +36,15 @@ function intialLoad() {
     mainContentContainer.appendChild(pageHeader);
     projArr.push(unassignedProjectData);
     saveDataToLocalStorage(projArr);
-    //loadTasksFromLocalStorage();
-    //window.location.reload();
   }
 
   createTabsFromLocalStorage();
   createTaskFromStorage();
   createSidebar();
-
-  //window.location.reload();
   AllTasksPage();
   completedPage();
   todayPage();
   weekPage();
-  //unassignedPage();
   importantPage();
 }
 

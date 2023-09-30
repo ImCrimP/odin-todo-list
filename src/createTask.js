@@ -1,5 +1,3 @@
-import loadDataFromLocalStorage from "./loadDataFromStorage";
-import createTabsFromLocalStorage from "./createFromStorage";
 import {
   loadTasksFromLocalStorage,
   updateTask,
@@ -11,11 +9,9 @@ import {
   isBefore,
   parseISO,
   isWithinInterval,
-  format,
   isToday,
   startOfDay,
 } from "date-fns";
-import createTaskFromStorage from "./createTaskFromStorage";
 
 function createTask(tabNameDash) {
   // Load tasks from local storage for the specified tabNameDash
@@ -24,18 +20,11 @@ function createTask(tabNameDash) {
   if (!Array.isArray(tasks)) {
     tasks = [];
   }
-  //taskData.dueDate = new Date();
 
   const addTaskBtn = document.querySelector(`#${tabNameDash}-add-task`);
   const allTasksPageBtn = document.querySelector("#all-page-header");
-  //addTaskBtn.textContent = "+ Add Task";
-  //addTaskBtn.setAttribute("id", `${tabNameDash}-add-task`);
-  //addTaskBtn.classList.add("add-task");
 
   addTaskBtn.addEventListener("click", () => {
-    //console.log("click");
-    // When the "Add Task" button is clicked within a project page,
-    // you can add your logic to create a new task element.
     const taskName = prompt("Enter task name:");
     if (taskName) {
       const taskData = {
@@ -44,12 +33,6 @@ function createTask(tabNameDash) {
         isImportant: false,
         dueDate: new Date(),
       };
-      console.log(
-        "TASK DATA " + taskData.taskName,
-        taskData.isComplete,
-        taskData.isImportant,
-        taskData.dueDate
-      );
 
       tasks.push(taskData);
       saveTasksToLocalStorage(tabNameDash, tasks);
@@ -252,18 +235,13 @@ function createTask(tabNameDash) {
       pickDateListeners();
       function pickDateListeners() {
         pickDate.addEventListener("input", () => {
-          //console.log("you chose " + pickDate.value);
-
           const pickDateFormatted = parseISO(pickDate.value);
           taskData.dueDate = pickDate.value;
-          //console.log(pickDateFormatted);
 
           const today = new Date();
           const startOfToday = startOfDay(today);
-          console.log("today " + today);
+
           const dueWithinWeek = addDays(today, 7);
-          //console.log(formatDate(dueWithinWeek));
-          //console.log("week from today " + dueWithinWeek);
 
           clonePickDate.value = pickDate.value;
           impPickDate.value = pickDate.value;
@@ -274,7 +252,6 @@ function createTask(tabNameDash) {
           taskData.dueDate = pickDate.value;
 
           updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
-          console.log("UPDATE DUE DATE:", taskData.dueDate);
 
           if (
             isWithinInterval(pickDateFormatted, {
@@ -299,18 +276,13 @@ function createTask(tabNameDash) {
         });
 
         clonePickDate.addEventListener("input", () => {
-          //console.log("you chose " + pickDate.value);
-
           const pickDateFormatted = parseISO(clonePickDate.value);
           taskData.dueDate = clonePickDate.value;
-          //console.log(pickDateFormatted);
 
           const today = new Date();
           const startOfToday = startOfDay(today);
-          console.log("today " + today);
+
           const dueWithinWeek = addDays(today, 7);
-          //console.log(formatDate(dueWithinWeek));
-          //console.log("week from today " + dueWithinWeek);
 
           pickDate.value = clonePickDate.value;
           impPickDate.value = clonePickDate.value;
@@ -321,7 +293,6 @@ function createTask(tabNameDash) {
           taskData.dueDate = pickDate.value;
 
           updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
-          console.log("UPDATE DUE DATE:", taskData.dueDate);
 
           if (
             isWithinInterval(pickDateFormatted, {
@@ -348,14 +319,11 @@ function createTask(tabNameDash) {
         impPickDate.addEventListener("input", () => {
           const pickDateFormatted = parseISO(impPickDate.value);
           taskData.dueDate = impPickDate.value;
-          //console.log(pickDateFormatted);
 
           const today = new Date();
           const startOfToday = startOfDay(today);
-          console.log("today " + today);
+
           const dueWithinWeek = addDays(today, 7);
-          //console.log(formatDate(dueWithinWeek));
-          //console.log("week from today " + dueWithinWeek);
 
           pickDate.value = impPickDate.value;
           clonePickDate.value = impPickDate.value;
@@ -366,7 +334,6 @@ function createTask(tabNameDash) {
           taskData.dueDate = pickDate.value;
 
           updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
-          console.log("UPDATE DUE DATE:", taskData.dueDate);
 
           if (
             isWithinInterval(pickDateFormatted, {
@@ -393,14 +360,11 @@ function createTask(tabNameDash) {
         compPickDate.addEventListener("input", () => {
           const pickDateFormatted = parseISO(compPickDate.value);
           taskData.dueDate = compPickDate.value;
-          //console.log(pickDateFormatted);
 
           const today = new Date();
           const startOfToday = startOfDay(today);
-          console.log("today " + today);
+
           const dueWithinWeek = addDays(today, 7);
-          //console.log(formatDate(dueWithinWeek));
-          //console.log("week from today " + dueWithinWeek);
 
           pickDate.value = compPickDate.value;
           clonePickDate.value = compPickDate.value;
@@ -411,7 +375,6 @@ function createTask(tabNameDash) {
           taskData.dueDate = pickDate.value;
 
           updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
-          console.log("UPDATE DUE DATE:", taskData.dueDate);
 
           if (
             isWithinInterval(pickDateFormatted, {
@@ -438,14 +401,11 @@ function createTask(tabNameDash) {
         todayPickDate.addEventListener("input", () => {
           const pickDateFormatted = parseISO(todayPickDate.value);
           taskData.dueDate = todayPickDate.value;
-          //console.log(pickDateFormatted);
 
           const today = new Date();
           const startOfToday = startOfDay(today);
-          console.log("today " + today);
+
           const dueWithinWeek = addDays(today, 7);
-          //console.log(formatDate(dueWithinWeek));
-          //console.log("week from today " + dueWithinWeek);
 
           pickDate.value = todayPickDate.value;
           clonePickDate.value = todayPickDate.value;
@@ -456,7 +416,6 @@ function createTask(tabNameDash) {
           taskData.dueDate = pickDate.value;
 
           updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
-          console.log("UPDATE DUE DATE:", taskData.dueDate);
 
           if (
             isWithinInterval(pickDateFormatted, {
@@ -483,14 +442,11 @@ function createTask(tabNameDash) {
         weekPickDate.addEventListener("input", () => {
           const pickDateFormatted = parseISO(weekPickDate.value);
           taskData.dueDate = weekPickDate.value;
-          //console.log(pickDateFormatted);jc
 
           const today = new Date();
           const startOfToday = startOfDay(today);
-          console.log("today " + today);
+
           const dueWithinWeek = addDays(today, 7);
-          //console.log(formatDate(dueWithinWeek));
-          //console.log("week from today " + dueWithinWeek);
 
           pickDate.value = weekPickDate.value;
           clonePickDate.value = weekPickDate.value;
@@ -501,7 +457,6 @@ function createTask(tabNameDash) {
           taskData.dueDate = pickDate.value;
 
           updateTask(tabNameDash, taskIndex, { dueDate: taskData.dueDate });
-          console.log("UPDATE DUE DATE:", taskData.dueDate);
 
           if (
             isWithinInterval(pickDateFormatted, {
@@ -637,7 +592,6 @@ function createTask(tabNameDash) {
           taskData.isComplete = true;
         }
         updateTask(tabNameDash, taskIndex, { isComplete: taskData.isComplete });
-        console.log("Is complete update:", taskData.isComplete);
       }
 
       //function for important buttons
@@ -652,7 +606,6 @@ function createTask(tabNameDash) {
           weekImportantBtn.classList.remove("toggle-on");
 
           taskData.isImportant = false;
-          //console.log(taskData.isImportant);
         } else {
           importantBtn.classList.add("toggle-on");
           cloneImportantBtn.classList.add("toggle-on");
@@ -664,27 +617,22 @@ function createTask(tabNameDash) {
           todayImportantBtn.classList.add("toggle-on");
           weekImportantBtn.classList.add("toggle-on");
           taskData.isImportant = true;
-          //console.log(taskData.isImportant);
         }
         updateTask(tabNameDash, taskIndex, {
           isImportant: taskData.isImportant,
         });
-        console.log("is importatn update:", taskData.isImportant);
       }
 
       //function for delete buttons
       function deleteFunction() {
-        console.log("TASK INDEX", taskIndex);
-        console.log("Del button for ", taskName);
         if (taskIndex !== -1) {
           // Remove the task object from the array by its index
           removeTask(tabNameDash, taskIndex);
-          //tasks.pop(taskIndex);
 
           taskElement.parentNode.removeChild(taskElement);
-          //mainPage.parentNode.removeChild(taskElement);
+
           cloneToAll.parentNode.removeChild(cloneToAll);
-          //allTasksPageBtn.parentNode.removeChild(cloneToAll);
+
           if (impHeader.parentNode.contains(impTask)) {
             impHeader.parentNode.removeChild(impTask);
           }
@@ -700,23 +648,8 @@ function createTask(tabNameDash) {
           if (weekPage.parentNode.contains(weekTask)) {
             weekPage.parentElement.removeChild(weekTask);
           }
-
-          // Get the index of the task element in the DOM (you can use data attributes or other identifiers)
-          //const taskIndex = Array.from(tasks).indexOf(taskData);
-
-          //removeTask(tabNameDash, taskIndex);
-
-          console.log("Tasks after removal", tasks);
         }
       }
-
-      //document.addEventListener("DOMContentLoaded", () => {
-      //  console.log("LOADED");
-      //  const tasksData = loadTasksFromLocalStorage(tabNameDash);
-      //  tasksData.forEach((taskData) => {
-      //    createTaskFromStorage();
-      // });
-      // });
     }
   });
 }

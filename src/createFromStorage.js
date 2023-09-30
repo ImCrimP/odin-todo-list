@@ -4,10 +4,6 @@ import removeProjectFromLocalStorage from "./removeFromLocalStorage";
 import { clearAllTasks } from "./taskLocalStorage";
 import { loadTasksFromLocalStorage } from "./taskLocalStorage";
 import createTaskFromStorage from "./createTaskFromStorage";
-import weekPage from "./week";
-import { clone } from "lodash";
-import { saveTasksToLocalStorage } from "./taskLocalStorage";
-import { removeTask } from "./taskLocalStorage";
 
 function createTabsFromLocalStorage() {
   document.addEventListener("DOMContentLoaded", () => {
@@ -32,7 +28,6 @@ function createTabsFromLocalStorage() {
       newTab.textContent = tabName;
 
       // Append the button to the sidebar
-      //sidebar.appendChild(newTab);
       newProj.parentNode.insertBefore(newTab, newProj);
 
       // Create a new main content container for the tab's content
@@ -123,12 +118,6 @@ function createTabsFromLocalStorage() {
 
           loadDataFromLocalStorage();
 
-          /*
-          const allPage = document.querySelector("#all-tab-page");
-          const allTab = document.querySelector("#all-tab");
-          allPage.classList.remove("hide");
-          allTab.classList.add("active");
-          console.log("projects", projArr);*/
           window.location.reload();
         });
       }
@@ -136,12 +125,6 @@ function createTabsFromLocalStorage() {
       if (!mainPage.contains(addTaskBtn)) {
         mainPage.appendChild(addTaskBtn);
       }
-
-      ///////////////////////////
-
-      // ... (add any other content you need for the tab here)
-
-      // Add event listeners to the tab button to switch to the corresponding content
 
       newTab.addEventListener("click", () => {
         createTask(tabNameDash);
